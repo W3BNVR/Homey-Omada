@@ -1,0 +1,8 @@
+{
+  "id": "client_online",
+  "title": { "en": "Omada client [[device]] is online", "nl": "Omada-client [[device]] is online" },
+  "titleFormatted": { "en": "Omada client [[device]] is online", "nl": "Omada-client [[device]] is online" },
+  "args": [
+    { "type": "device", "name": "device", "filter": "driver_id=omada_client" }
+  ]
+}

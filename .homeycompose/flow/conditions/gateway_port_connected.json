@@ -1,0 +1,9 @@
+{
+  "id": "gateway_port_connected",
+  "title": { "en": "Gateway [[mac]] port [[port]] has a link", "nl": "Gatewaypoort [[port]] op [[mac]] heeft verbinding" },
+  "titleFormatted": { "en": "Gateway [[mac]] port [[port]] has a link", "nl": "Gatewaypoort [[port]] op [[mac]] heeft verbinding" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Gateway MAC address", "nl": "MAC-adres van gateway" } },
+    { "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "gateway_wan_connected",
+  "title": { "en": "Gateway [[mac]] WAN port [[port]] is connected, IPv6 [[ipv6]]", "nl": "WAN-poort [[port]] van gateway [[mac]] is verbonden, IPv6 [[ipv6]]" },
+  "titleFormatted": { "en": "Gateway [[mac]] WAN port [[port]] is connected, IPv6 [[ipv6]]", "nl": "WAN-poort [[port]] van gateway [[mac]] is verbonden, IPv6 [[ipv6]]" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Gateway MAC address", "nl": "MAC-adres van gateway" } },
+    { "type": "number", "name": "port", "title": { "en": "WAN port", "nl": "WAN-poortnummer" }, "min": 1 },
+    { "type": "checkbox", "name": "ipv6", "title": { "en": "Check IPv6", "nl": "Controleer IPv6" } }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "client_connected",
+  "title": { "en": "An Omada client connects", "nl": "Een Omada-client maakt verbinding" },
+  "tokens": [
+    { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
+    { "name": "name", "type": "string", "title": { "en": "Name", "nl": "Naam" } },
+    { "name": "ip", "type": "string", "title": { "en": "IP address", "nl": "IP-adres" } }
+  ]
+}

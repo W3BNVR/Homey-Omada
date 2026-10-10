@@ -1,0 +1,8 @@
+{
+  "id": "client_reconnect",
+  "title": { "en": "Reconnect Omada client [[mac]]", "nl": "Verbind Omada-client [[mac]] opnieuw" },
+  "titleFormatted": { "en": "Reconnect Omada client [[mac]]", "nl": "Verbind Omada-client [[mac]] opnieuw" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Client MAC address", "nl": "MAC-adres van client" } }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "gateway_online_detection",
+  "title": { "en": "Gateway [[mac]] port [[port]] passes online detection", "nl": "Gatewaypoort [[port]] op [[mac]] slaagt voor internetcontrole" },
+  "titleFormatted": { "en": "Gateway [[mac]] port [[port]] passes online detection", "nl": "Gatewaypoort [[port]] op [[mac]] slaagt voor internetcontrole" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Gateway MAC address", "nl": "MAC-adres van gateway" } },
+    { "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }
+  ]
+}

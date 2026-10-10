@@ -1,0 +1,1362 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.mnapj.omada",
+  "version": "1.4.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "runtime": "nodejs",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "W3B - Omada Integration",
+    "nl": "W3B - Omada Integration"
+  },
+  "description": {
+    "en": "Connect Omada switches, access points and gateways to Homey.",
+    "nl": "Verbind Omada-switches, access points en gateways met Homey."
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "api": {
+    "testConnection": {
+      "method": "POST",
+      "path": "/test"
+    }
+  },
+  "author": {
+    "name": "Micha Napjus",
+    "email": "mnapjus@gmail.com"
+  },
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
+  },
+  "brandColor": "#28B47D",
+  "flow": {
+    "triggers": [
+      {
+        "id": "client_connected",
+        "title": {
+          "en": "An Omada client connects",
+          "nl": "Een Omada-client maakt verbinding"
+        },
+        "tokens": [
+          {
+            "name": "mac",
+            "type": "string",
+            "title": {
+              "en": "MAC address",
+              "nl": "MAC-adres"
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "title": {
+              "en": "Name",
+              "nl": "Naam"
+            }
+          },
+          {
+            "name": "ip",
+            "type": "string",
+            "title": {
+              "en": "IP address",
+              "nl": "IP-adres"
+            }
+          }
+        ]
+      },
+      {
+        "id": "client_disconnected",
+        "title": {
+          "en": "An Omada client disconnects",
+          "nl": "Een Omada-client verbreekt de verbinding"
+        },
+        "tokens": [
+          {
+            "name": "mac",
+            "type": "string",
+            "title": {
+              "en": "MAC address",
+              "nl": "MAC-adres"
+            }
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "title": {
+              "en": "Name",
+              "nl": "Naam"
+            }
+          },
+          {
+            "name": "ip",
+            "type": "string",
+            "title": {
+              "en": "IP address",
+              "nl": "IP-adres"
+            }
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "client_online",
+        "title": {
+          "en": "Omada client [[device]] is online",
+          "nl": "Omada-client [[device]] is online"
+        },
+        "titleFormatted": {
+          "en": "Omada client [[device]] is online",
+          "nl": "Omada-client [[device]] is online"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_client"
+          }
+        ]
+      },
+      {
+        "id": "device_cpu_above",
+        "title": {
+          "en": "Omada device [[device]] CPU is at least [[percentage]]%",
+          "nl": "CPU van Omada-apparaat [[device]] is minstens [[percentage]]%"
+        },
+        "titleFormatted": {
+          "en": "Omada device [[device]] CPU is at least [[percentage]]%",
+          "nl": "CPU van Omada-apparaat [[device]] is minstens [[percentage]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device"
+          },
+          {
+            "type": "number",
+            "name": "percentage",
+            "title": {
+              "en": "Percentage",
+              "nl": "Percentage"
+            },
+            "min": 0,
+            "max": 100
+          }
+        ]
+      },
+      {
+        "id": "device_memory_above",
+        "title": {
+          "en": "Omada device [[device]] memory is at least [[percentage]]%",
+          "nl": "Geheugen van Omada-apparaat [[device]] is minstens [[percentage]]%"
+        },
+        "titleFormatted": {
+          "en": "Omada device [[device]] memory is at least [[percentage]]%",
+          "nl": "Geheugen van Omada-apparaat [[device]] is minstens [[percentage]]%"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device"
+          },
+          {
+            "type": "number",
+            "name": "percentage",
+            "title": {
+              "en": "Percentage",
+              "nl": "Percentage"
+            },
+            "min": 0,
+            "max": 100
+          }
+        ]
+      },
+      {
+        "id": "gateway_online_detection",
+        "title": {
+          "en": "Gateway [[mac]] port [[port]] passes online detection",
+          "nl": "Gatewaypoort [[port]] op [[mac]] slaagt voor internetcontrole"
+        },
+        "titleFormatted": {
+          "en": "Gateway [[mac]] port [[port]] passes online detection",
+          "nl": "Gatewaypoort [[port]] op [[mac]] slaagt voor internetcontrole"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "gateway_poe_active",
+        "title": {
+          "en": "Gateway [[mac]] port [[port]] is delivering PoE",
+          "nl": "Gatewaypoort [[port]] op [[mac]] levert PoE"
+        },
+        "titleFormatted": {
+          "en": "Gateway [[mac]] port [[port]] is delivering PoE",
+          "nl": "Gatewaypoort [[port]] op [[mac]] levert PoE"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "gateway_port_connected",
+        "title": {
+          "en": "Gateway [[mac]] port [[port]] has a link",
+          "nl": "Gatewaypoort [[port]] op [[mac]] heeft verbinding"
+        },
+        "titleFormatted": {
+          "en": "Gateway [[mac]] port [[port]] has a link",
+          "nl": "Gatewaypoort [[port]] op [[mac]] heeft verbinding"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "gateway_wan_connected",
+        "title": {
+          "en": "Gateway [[mac]] WAN port [[port]] is connected, IPv6 [[ipv6]]",
+          "nl": "WAN-poort [[port]] van gateway [[mac]] is verbonden, IPv6 [[ipv6]]"
+        },
+        "titleFormatted": {
+          "en": "Gateway [[mac]] WAN port [[port]] is connected, IPv6 [[ipv6]]",
+          "nl": "WAN-poort [[port]] van gateway [[mac]] is verbonden, IPv6 [[ipv6]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "WAN port",
+              "nl": "WAN-poortnummer"
+            },
+            "min": 1
+          },
+          {
+            "type": "checkbox",
+            "name": "ipv6",
+            "title": {
+              "en": "Check IPv6",
+              "nl": "Controleer IPv6"
+            }
+          }
+        ]
+      },
+      {
+        "id": "switch_port_power_above",
+        "title": {
+          "en": "Switch port [[port]] PoE power is at least [[watts]] W",
+          "nl": "PoE-verbruik van switchpoort [[port]] is minstens [[watts]] W"
+        },
+        "titleFormatted": {
+          "en": "Switch port [[port]] PoE power is at least [[watts]] W",
+          "nl": "PoE-verbruik van switchpoort [[port]] is minstens [[watts]] W"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          },
+          {
+            "type": "number",
+            "name": "watts",
+            "title": {
+              "en": "Watts",
+              "nl": "Watt"
+            },
+            "min": 0
+          }
+        ]
+      },
+      {
+        "id": "omada_device_online",
+        "title": {
+          "en": "This switch is online",
+          "nl": "Deze switch is online"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          }
+        ]
+      },
+      {
+        "id": "switch_port_connected",
+        "title": {
+          "en": "Port [[port]] has a connection",
+          "nl": "Poort [[port]] heeft verbinding"
+        },
+        "titleFormatted": {
+          "en": "Port [[port]] has a connection",
+          "nl": "Poort [[port]] heeft verbinding"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "switch_poe_enabled",
+        "title": {
+          "en": "PoE is enabled on port [[port]]",
+          "nl": "PoE staat aan op poort [[port]]"
+        },
+        "titleFormatted": {
+          "en": "PoE is enabled on port [[port]]",
+          "nl": "PoE staat aan op poort [[port]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "client_block",
+        "title": {
+          "en": "Block Omada client [[mac]]",
+          "nl": "Blokkeer Omada-client [[mac]]"
+        },
+        "titleFormatted": {
+          "en": "Block Omada client [[mac]]",
+          "nl": "Blokkeer Omada-client [[mac]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Client MAC address",
+              "nl": "MAC-adres van client"
+            }
+          }
+        ]
+      },
+      {
+        "id": "client_reconnect",
+        "title": {
+          "en": "Reconnect Omada client [[mac]]",
+          "nl": "Verbind Omada-client [[mac]] opnieuw"
+        },
+        "titleFormatted": {
+          "en": "Reconnect Omada client [[mac]]",
+          "nl": "Verbind Omada-client [[mac]] opnieuw"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Client MAC address",
+              "nl": "MAC-adres van client"
+            }
+          }
+        ]
+      },
+      {
+        "id": "client_set_name",
+        "title": {
+          "en": "Set Omada client [[mac]] name to [[name]]",
+          "nl": "Geef Omada-client [[mac]] de naam [[name]]"
+        },
+        "titleFormatted": {
+          "en": "Set Omada client [[mac]] name to [[name]]",
+          "nl": "Geef Omada-client [[mac]] de naam [[name]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Client MAC address",
+              "nl": "MAC-adres van client"
+            }
+          },
+          {
+            "type": "text",
+            "name": "name",
+            "title": {
+              "en": "New name",
+              "nl": "Nieuwe naam"
+            }
+          }
+        ]
+      },
+      {
+        "id": "client_unblock",
+        "title": {
+          "en": "Unblock Omada client [[mac]]",
+          "nl": "Deblokkeer Omada-client [[mac]]"
+        },
+        "titleFormatted": {
+          "en": "Unblock Omada client [[mac]]",
+          "nl": "Deblokkeer Omada-client [[mac]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Client MAC address",
+              "nl": "MAC-adres van client"
+            }
+          }
+        ]
+      },
+      {
+        "id": "device_firmware_upgrade",
+        "title": {
+          "en": "Install available Omada device firmware [[mac]]",
+          "nl": "Installeer beschikbare Omada-firmware voor apparaat [[mac]]"
+        },
+        "titleFormatted": {
+          "en": "Install available Omada device firmware [[mac]]",
+          "nl": "Installeer beschikbare Omada-firmware voor apparaat [[mac]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Device MAC address",
+              "nl": "MAC-adres van apparaat"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gateway_poe_off",
+        "title": {
+          "en": "Disable PoE on gateway [[mac]] port [[port]]",
+          "nl": "Zet PoE uit op gateway [[mac]], poort [[port]]"
+        },
+        "titleFormatted": {
+          "en": "Disable PoE on gateway [[mac]] port [[port]]",
+          "nl": "Zet PoE uit op gateway [[mac]], poort [[port]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "gateway_poe_on",
+        "title": {
+          "en": "Enable PoE on gateway [[mac]] port [[port]]",
+          "nl": "Zet PoE aan op gateway [[mac]], poort [[port]]"
+        },
+        "titleFormatted": {
+          "en": "Enable PoE on gateway [[mac]] port [[port]]",
+          "nl": "Zet PoE aan op gateway [[mac]], poort [[port]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "gateway_wan_connect",
+        "title": {
+          "en": "Connect WAN port [[port]] on gateway [[mac]], IPv6 [[ipv6]]",
+          "nl": "Verbind WAN-poort [[port]] op gateway [[mac]], IPv6 [[ipv6]]"
+        },
+        "titleFormatted": {
+          "en": "Connect WAN port [[port]] on gateway [[mac]], IPv6 [[ipv6]]",
+          "nl": "Verbind WAN-poort [[port]] op gateway [[mac]], IPv6 [[ipv6]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "WAN port",
+              "nl": "WAN-poortnummer"
+            },
+            "min": 1
+          },
+          {
+            "type": "checkbox",
+            "name": "ipv6",
+            "title": {
+              "en": "Control IPv6",
+              "nl": "IPv6 bedienen"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gateway_wan_disconnect",
+        "title": {
+          "en": "Disconnect WAN port [[port]] on gateway [[mac]], IPv6 [[ipv6]]",
+          "nl": "Verbreek WAN-poort [[port]] op gateway [[mac]], IPv6 [[ipv6]]"
+        },
+        "titleFormatted": {
+          "en": "Disconnect WAN port [[port]] on gateway [[mac]], IPv6 [[ipv6]]",
+          "nl": "Verbreek WAN-poort [[port]] op gateway [[mac]], IPv6 [[ipv6]]"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Gateway MAC address",
+              "nl": "MAC-adres van gateway"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "WAN port",
+              "nl": "WAN-poortnummer"
+            },
+            "min": 1
+          },
+          {
+            "type": "checkbox",
+            "name": "ipv6",
+            "title": {
+              "en": "Control IPv6",
+              "nl": "IPv6 bedienen"
+            }
+          }
+        ]
+      },
+      {
+        "id": "switch_port_disable",
+        "title": {
+          "en": "Disable port [[port]] on switch [[mac]]",
+          "nl": "Zet poort [[port]] op switch [[mac]] uit"
+        },
+        "titleFormatted": {
+          "en": "Disable port [[port]] on switch [[mac]]",
+          "nl": "Zet poort [[port]] op switch [[mac]] uit"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Switch MAC address",
+              "nl": "MAC-adres van switch"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "switch_port_enable",
+        "title": {
+          "en": "Enable port [[port]] on switch [[mac]]",
+          "nl": "Zet poort [[port]] op switch [[mac]] aan"
+        },
+        "titleFormatted": {
+          "en": "Enable port [[port]] on switch [[mac]]",
+          "nl": "Zet poort [[port]] op switch [[mac]] aan"
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "mac",
+            "title": {
+              "en": "Switch MAC address",
+              "nl": "MAC-adres van switch"
+            }
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "switch_poe_on",
+        "title": {
+          "en": "Enable PoE on port [[port]]",
+          "nl": "Zet PoE op poort [[port]] aan"
+        },
+        "titleFormatted": {
+          "en": "Enable PoE on port [[port]]",
+          "nl": "Zet PoE op poort [[port]] aan"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "switch_poe_off",
+        "title": {
+          "en": "Disable PoE on port [[port]]",
+          "nl": "Zet PoE op poort [[port]] uit"
+        },
+        "titleFormatted": {
+          "en": "Disable PoE on port [[port]]",
+          "nl": "Zet PoE op poort [[port]] uit"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      },
+      {
+        "id": "switch_poe_recover",
+        "title": {
+          "en": "Recover PoE on port [[port]]",
+          "nl": "Herstel PoE op poort [[port]]"
+        },
+        "titleFormatted": {
+          "en": "Recover PoE on port [[port]]",
+          "nl": "Herstel PoE op poort [[port]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=omada_switch"
+          },
+          {
+            "type": "number",
+            "name": "port",
+            "title": {
+              "en": "Port",
+              "nl": "Poortnummer"
+            },
+            "min": 1
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Omada Client",
+        "nl": "Omada-client"
+      },
+      "class": "other",
+      "capabilities": [],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "small": "/drivers/omada_client/assets/images/small.png",
+        "large": "/drivers/omada_client/assets/images/large.png"
+      },
+      "id": "omada_client",
+      "settings": [
+        {
+          "id": "online",
+          "type": "label",
+          "label": {
+            "en": "Connection",
+            "nl": "Verbinding"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "mac",
+          "type": "label",
+          "label": {
+            "en": "MAC address",
+            "nl": "MAC-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP address",
+            "nl": "IP-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "hostname",
+          "type": "label",
+          "label": {
+            "en": "Hostname",
+            "nl": "Hostnaam"
+          },
+          "value": "Unknown"
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Omada Controller",
+        "nl": "Omada-controller"
+      },
+      "class": "other",
+      "capabilities": [],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "small": "/drivers/omada_controller/assets/images/small.png",
+        "large": "/drivers/omada_controller/assets/images/large.png"
+      },
+      "id": "omada_controller",
+      "settings": [
+        {
+          "id": "online",
+          "type": "label",
+          "label": {
+            "en": "Status",
+            "nl": "Status"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model",
+            "nl": "Model"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmware",
+          "type": "label",
+          "label": {
+            "en": "Installed controller version",
+            "nl": "Geïnstalleerde controllerversie"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmwareLatest",
+          "type": "label",
+          "label": {
+            "en": "Latest available version",
+            "nl": "Nieuwste beschikbare versie"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "uptime",
+          "type": "label",
+          "label": {
+            "en": "Uptime",
+            "nl": "Uptime"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "cpu",
+          "type": "label",
+          "label": {
+            "en": "CPU usage (%)",
+            "nl": "CPU-gebruik (%)"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "memory",
+          "type": "label",
+          "label": {
+            "en": "Memory usage (%)",
+            "nl": "Geheugengebruik (%)"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "mac",
+          "type": "label",
+          "label": {
+            "en": "MAC address",
+            "nl": "MAC-adres"
+          },
+          "value": "Unknown"
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Omada EAP",
+        "nl": "Omada EAP"
+      },
+      "class": "other",
+      "capabilities": [],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "small": "/drivers/omada_eap/assets/images/small.png",
+        "large": "/drivers/omada_eap/assets/images/large.png"
+      },
+      "id": "omada_eap",
+      "settings": [
+        {
+          "id": "online",
+          "type": "label",
+          "label": {
+            "en": "Status",
+            "nl": "Status"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model",
+            "nl": "Model"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmware",
+          "type": "label",
+          "label": {
+            "en": "Firmware",
+            "nl": "Firmware"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmwareLatest",
+          "type": "label",
+          "label": {
+            "en": "Latest firmware",
+            "nl": "Nieuwste firmware"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP address",
+            "nl": "IP-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "mac",
+          "type": "label",
+          "label": {
+            "en": "MAC address",
+            "nl": "MAC-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "uptime",
+          "type": "label",
+          "label": {
+            "en": "Uptime",
+            "nl": "Uptime"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "cpu",
+          "type": "label",
+          "label": {
+            "en": "CPU",
+            "nl": "CPU"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "memory",
+          "type": "label",
+          "label": {
+            "en": "Memory",
+            "nl": "Geheugen"
+          },
+          "value": "Unknown"
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Omada Gateway",
+        "nl": "Omada-gateway"
+      },
+      "class": "other",
+      "capabilities": [],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "small": "/drivers/omada_gateway/assets/images/small.png",
+        "large": "/drivers/omada_gateway/assets/images/large.png"
+      },
+      "id": "omada_gateway",
+      "settings": [
+        {
+          "id": "online",
+          "type": "label",
+          "label": {
+            "en": "Status",
+            "nl": "Status"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model",
+            "nl": "Model"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmware",
+          "type": "label",
+          "label": {
+            "en": "Firmware",
+            "nl": "Firmware"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmwareLatest",
+          "type": "label",
+          "label": {
+            "en": "Latest firmware",
+            "nl": "Nieuwste firmware"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP address",
+            "nl": "IP-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "mac",
+          "type": "label",
+          "label": {
+            "en": "MAC address",
+            "nl": "MAC-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "uptime",
+          "type": "label",
+          "label": {
+            "en": "Uptime",
+            "nl": "Uptime"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "cpu",
+          "type": "label",
+          "label": {
+            "en": "CPU",
+            "nl": "CPU"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "memory",
+          "type": "label",
+          "label": {
+            "en": "Memory",
+            "nl": "Geheugen"
+          },
+          "value": "Unknown"
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Omada Switch",
+        "nl": "Omada-switch"
+      },
+      "class": "other",
+      "capabilities": [
+        "measure_power"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "images": {
+        "small": "/drivers/omada_switch/assets/images/small.png",
+        "large": "/drivers/omada_switch/assets/images/large.png"
+      },
+      "id": "omada_switch",
+      "settings": [
+        {
+          "id": "online",
+          "type": "label",
+          "label": {
+            "en": "Status",
+            "nl": "Status"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "model",
+          "type": "label",
+          "label": {
+            "en": "Model",
+            "nl": "Model"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmware",
+          "type": "label",
+          "label": {
+            "en": "Firmware",
+            "nl": "Firmware"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "firmwareLatest",
+          "type": "label",
+          "label": {
+            "en": "Latest firmware",
+            "nl": "Nieuwste firmware"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "ip",
+          "type": "label",
+          "label": {
+            "en": "IP address",
+            "nl": "IP-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "mac",
+          "type": "label",
+          "label": {
+            "en": "MAC address",
+            "nl": "MAC-adres"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "portCount",
+          "type": "label",
+          "label": {
+            "en": "Number of ports",
+            "nl": "Aantal poorten"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "uptime",
+          "type": "label",
+          "label": {
+            "en": "Uptime",
+            "nl": "Uptime"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "cpu",
+          "type": "label",
+          "label": {
+            "en": "CPU",
+            "nl": "CPU"
+          },
+          "value": "Unknown"
+        },
+        {
+          "id": "memory",
+          "type": "label",
+          "label": {
+            "en": "Memory",
+            "nl": "Geheugen"
+          },
+          "value": "Unknown"
+        }
+      ]
+    }
+  ],
+  "widgets": {
+    "port-control": {
+      "name": {
+        "en": "Omada port control",
+        "nl": "Omada-poortbeheer"
+      },
+      "height": 280,
+      "settings": [],
+      "api": {
+        "getDevices": {
+          "method": "GET",
+          "path": "/devices"
+        },
+        "setPoeMode": {
+          "method": "PUT",
+          "path": "/poe/:deviceType/:siteId/:switchMac/:port"
+        },
+        "setPortEnabled": {
+          "method": "PUT",
+          "path": "/port/:siteId/:switchMac/:port"
+        },
+        "setGatewayWanConnected": {
+          "method": "PUT",
+          "path": "/wan/:siteId/:switchMac/:port"
+        },
+        "setMultiPoeMode": {
+          "method": "PUT",
+          "path": "/poe/:siteId/:switchMac"
+        },
+        "recoverPoe": {
+          "method": "POST",
+          "path": "/poe-recovery/:siteId/:switchMac"
+        }
+      },
+      "id": "port-control"
+    }
+  }
+}

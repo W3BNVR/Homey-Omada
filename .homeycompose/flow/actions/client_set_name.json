@@ -1,0 +1,9 @@
+{
+  "id": "client_set_name",
+  "title": { "en": "Set Omada client [[mac]] name to [[name]]", "nl": "Geef Omada-client [[mac]] de naam [[name]]" },
+  "titleFormatted": { "en": "Set Omada client [[mac]] name to [[name]]", "nl": "Geef Omada-client [[mac]] de naam [[name]]" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Client MAC address", "nl": "MAC-adres van client" } },
+    { "type": "text", "name": "name", "title": { "en": "New name", "nl": "Nieuwe naam" } }
+  ]
+}

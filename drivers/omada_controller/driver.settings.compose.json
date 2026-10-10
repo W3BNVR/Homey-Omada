@@ -1,0 +1,10 @@
+[
+  { "id": "online", "type": "label", "label": { "en": "Status", "nl": "Status" }, "value": "Unknown" },
+  { "id": "model", "type": "label", "label": { "en": "Model", "nl": "Model" }, "value": "Unknown" },
+  { "id": "firmware", "type": "label", "label": { "en": "Installed controller version", "nl": "Geïnstalleerde controllerversie" }, "value": "Unknown" },
+  { "id": "firmwareLatest", "type": "label", "label": { "en": "Latest available version", "nl": "Nieuwste beschikbare versie" }, "value": "Unknown" },
+  { "id": "uptime", "type": "label", "label": { "en": "Uptime", "nl": "Uptime" }, "value": "Unknown" },
+  { "id": "cpu", "type": "label", "label": { "en": "CPU usage (%)", "nl": "CPU-gebruik (%)" }, "value": "Unknown" },
+  { "id": "memory", "type": "label", "label": { "en": "Memory usage (%)", "nl": "Geheugengebruik (%)" }, "value": "Unknown" },
+  { "id": "mac", "type": "label", "label": { "en": "MAC address", "nl": "MAC-adres" }, "value": "Unknown" }
+]

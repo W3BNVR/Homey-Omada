@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+  <style>
+    body { margin: 0; padding: 18px; font-family: sans-serif; color: #222; }
+    .group { margin: 16px 0; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+    input[type="text"], input[type="password"] { box-sizing: border-box; width: 100%; padding: 10px; }
+    .hint, #status { color: #666; font-size: 13px; }
+    button { margin-top: 8px; padding: 10px 16px; }
+    .check { display: flex; gap: 8px; align-items: flex-start; }
+  </style>
+</head>
+<body>
+  <header class="homey-header">
+    <h1 class="homey-title">W3B - Omada Integration</h1>
+    <p class="homey-subtitle">Verbind deze Homey met je lokale Omada Software Controller.</p>
+  </header>
+
+  <div class="group">
+    <label for="controllerUrl">Interface Access Address</label>
+    <input id="controllerUrl" type="text" placeholder="https://192.168.1.10:8043" autocomplete="url">
+    <p class="hint">Neem dit adres over uit Omada: Global View → Settings → Platform Integration → Open API → jouw app → View.</p>
+  </div>
+  <div class="group">
+    <label for="omadacId">Omada ID</label>
+    <input id="omadacId" type="text" autocomplete="off">
+  </div>
+  <div class="group">
+    <label for="clientId">Client ID</label>
+    <input id="clientId" type="text" autocomplete="off">
+  </div>
+  <div class="group">
+    <label for="clientSecret">Client Secret</label>
+    <input id="clientSecret" type="password" autocomplete="new-password" placeholder="Leeg laten om het opgeslagen secret te behouden">
+    <p class="hint">Maak in Omada een API-app in Client mode. Deze gegevens blijven nodig voor de Open API.</p>
+  </div>
+  <div class="group">
+    <label for="controllerUsername">Lokale Omada-gebruikersnaam</label>
+    <input id="controllerUsername" type="text" autocomplete="username">
+    <p class="hint">Nodig voor het ophalen en behouden van de huidige switchpoortinstellingen bij PoE-wijzigingen. Gebruik een lokaal controlleraccount met rechten om switchpoorten te wijzigen.</p>
+  </div>
+  <div class="group">
+    <label for="controllerPassword">Lokaal Omada-wachtwoord</label>
+    <input id="controllerPassword" type="password" autocomplete="new-password" placeholder="Leeg laten om het opgeslagen wachtwoord te behouden">
+  </div>
+  <div class="group">
+    <label for="siteId">Standaard Site ID (optioneel)</label>
+    <input id="siteId" type="text" autocomplete="off">
+  </div>
+  <div class="group check">
+    <input id="allowSelfSigned" type="checkbox">
+    <label for="allowSelfSigned">Vertrouw het lokale zelfondertekende certificaat van Omada</label>
+  </div>
+  <p class="hint">Schakel dit alleen in als je lokale controller een zelfondertekend HTTPS-certificaat gebruikt.</p>
+  <button id="save" class="homey-button-primary">Opslaan en verbinden</button>
+  <p id="status" role="status"></p>
+
+  <script>
+    function onHomeyReady(Homey) {
+      const fields = ['controllerUrl', 'omadacId', 'clientId', 'siteId', 'controllerUsername'];
+      fields.forEach(function (name) {
+        Homey.get(name, function (error, value) {
+          if (!error && value) document.getElementById(name).value = value;
+        });
+      });
+      Homey.get('allowSelfSigned', function (error, value) {
+        if (!error) document.getElementById('allowSelfSigned').checked = value === true;
+      });
+
+      document.getElementById('save').addEventListener('click', async function () {
+        const button = document.getElementById('save');
+        const status = document.getElementById('status');
+        button.disabled = true;
+        status.textContent = 'Instellingen opslaan en verbinding controleren…';
+
+        const values = {};
+        fields.forEach(function (name) {
+          values[name] = document.getElementById(name).value.trim();
+        });
+        values.allowSelfSigned = document.getElementById('allowSelfSigned').checked;
+
+        try {
+          await Promise.all(Object.keys(values).map(function (key) {
+            return new Promise(function (resolve, reject) {
+              Homey.set(key, values[key], function (error) {
+                if (error) reject(error);
+                else resolve();
+              });
+            });
+          }));
+          const secret = document.getElementById('clientSecret').value;
+          if (secret) {
+            await new Promise(function (resolve, reject) {
+              Homey.set('clientSecret', secret, function (error) {
+                if (error) reject(error);
+                else resolve();
+              });
+            });
+            document.getElementById('clientSecret').value = '';
+          }
+          const controllerPassword = document.getElementById('controllerPassword').value;
+          if (controllerPassword) {
+            await new Promise(function (resolve, reject) {
+              Homey.set('controllerPassword', controllerPassword, function (error) {
+                if (error) reject(error);
+                else resolve();
+              });
+            });
+            document.getElementById('controllerPassword').value = '';
+          }
+          Homey.api('POST', '/test', {}, function (error, result) {
+            button.disabled = false;
+            if (error) {
+              status.textContent = 'Verbinding mislukt. Controleer adres, API-rechten en certificaatinstelling.';
+              Homey.alert(error);
+              return;
+            }
+            const sites = (result && result.sites) || [];
+            status.textContent = sites.length
+              ? 'Verbonden. Sites: ' + sites.map(function (site) { return site.name + ' (' + site.id + ')'; }).join(', ')
+              : 'Verbonden; er zijn geen sites beschikbaar met deze API-rechten.';
+          });
+        } catch (error) {
+          button.disabled = false;
+          status.textContent = 'Instellingen opslaan is mislukt.';
+          Homey.alert(error);
+        }
+      });
+
+      Homey.ready();
+    }
+  </script>
+</body>
+</html>

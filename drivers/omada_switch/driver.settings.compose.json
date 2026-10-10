@@ -1,0 +1,12 @@
+[
+  { "id": "online", "type": "label", "label": { "en": "Status", "nl": "Status" }, "value": "Unknown" },
+  { "id": "model", "type": "label", "label": { "en": "Model", "nl": "Model" }, "value": "Unknown" },
+  { "id": "firmware", "type": "label", "label": { "en": "Firmware", "nl": "Firmware" }, "value": "Unknown" },
+  { "id": "firmwareLatest", "type": "label", "label": { "en": "Latest firmware", "nl": "Nieuwste firmware" }, "value": "Unknown" },
+  { "id": "ip", "type": "label", "label": { "en": "IP address", "nl": "IP-adres" }, "value": "Unknown" },
+  { "id": "mac", "type": "label", "label": { "en": "MAC address", "nl": "MAC-adres" }, "value": "Unknown" },
+  { "id": "portCount", "type": "label", "label": { "en": "Number of ports", "nl": "Aantal poorten" }, "value": "Unknown" },
+  { "id": "uptime", "type": "label", "label": { "en": "Uptime", "nl": "Uptime" }, "value": "Unknown" },
+  { "id": "cpu", "type": "label", "label": { "en": "CPU", "nl": "CPU" }, "value": "Unknown" },
+  { "id": "memory", "type": "label", "label": { "en": "Memory", "nl": "Geheugen" }, "value": "Unknown" }
+]

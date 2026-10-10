@@ -1,0 +1,9 @@
+{
+  "id": "gateway_poe_off",
+  "title": { "en": "Disable PoE on gateway [[mac]] port [[port]]", "nl": "Zet PoE uit op gateway [[mac]], poort [[port]]" },
+  "titleFormatted": { "en": "Disable PoE on gateway [[mac]] port [[port]]", "nl": "Zet PoE uit op gateway [[mac]], poort [[port]]" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Gateway MAC address", "nl": "MAC-adres van gateway" } },
+    { "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }
+  ]
+}

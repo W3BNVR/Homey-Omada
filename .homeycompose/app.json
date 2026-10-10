@@ -1,0 +1,37 @@
+{
+  "id": "com.mnapj.omada",
+  "version": "1.4.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "runtime": "nodejs",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "W3B - Omada Integration",
+    "nl": "W3B - Omada Integration"
+  },
+  "description": {
+    "en": "Connect Omada switches, access points and gateways to Homey.",
+    "nl": "Verbind Omada-switches, access points en gateways met Homey."
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "api": {
+    "testConnection": {
+      "method": "POST",
+      "path": "/test"
+    }
+  },
+  "author": {
+    "name": "Micha Napjus",
+    "email": "mnapjus@gmail.com"
+  },
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
+  },
+  "brandColor": "#28B47D"
+}

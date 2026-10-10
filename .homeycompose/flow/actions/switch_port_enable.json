@@ -1,0 +1,9 @@
+{
+  "id": "switch_port_enable",
+  "title": { "en": "Enable port [[port]] on switch [[mac]]", "nl": "Zet poort [[port]] op switch [[mac]] aan" },
+  "titleFormatted": { "en": "Enable port [[port]] on switch [[mac]]", "nl": "Zet poort [[port]] op switch [[mac]] aan" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Switch MAC address", "nl": "MAC-adres van switch" } },
+    { "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }
+  ]
+}

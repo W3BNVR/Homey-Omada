@@ -1,0 +1,30 @@
+{
+  "name": {
+    "en": "Omada Switch",
+    "nl": "Omada-switch"
+  },
+  "class": "other",
+  "capabilities": [
+    "measure_power"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "images": {
+    "small": "/drivers/omada_switch/assets/images/small.png",
+    "large": "/drivers/omada_switch/assets/images/large.png"
+  }
+}

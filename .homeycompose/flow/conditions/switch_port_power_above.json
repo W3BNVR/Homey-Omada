@@ -1,0 +1,10 @@
+{
+  "id": "switch_port_power_above",
+  "title": { "en": "Switch port [[port]] PoE power is at least [[watts]] W", "nl": "PoE-verbruik van switchpoort [[port]] is minstens [[watts]] W" },
+  "titleFormatted": { "en": "Switch port [[port]] PoE power is at least [[watts]] W", "nl": "PoE-verbruik van switchpoort [[port]] is minstens [[watts]] W" },
+  "args": [
+    { "type": "device", "name": "device", "filter": "driver_id=omada_switch" },
+    { "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 },
+    { "type": "number", "name": "watts", "title": { "en": "Watts", "nl": "Watt" }, "min": 0 }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "com.mnapj.omada",
+  "version": "1.4.0",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
+  },
+  "devDependencies": {
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.12",
+    "eslint": "~8.57.1",
+    "eslint-config-athom": "~4.0.2"
+  }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/widget.css">
+  <script src="/homey.js" data-origin="widget"></script>
+  <script defer src="/widget.js"></script>
+  <title>Omada-poortbeheer</title>
+</head>
+<body>
+  <main class="layout">
+    <section class="controls">
+      <label class="device-select">
+        <span class="eyebrow">APPARAAT</span>
+        <select id="device" aria-label="Selecteer Omada-apparaat">
+          <option value="">Apparaten laden…</option>
+        </select>
+      </label>
+
+      <label class="port-select">
+        <span class="eyebrow">POORT</span>
+        <select id="port" aria-label="Selecteer poort" disabled>
+          <option value="">Selecteer een apparaat</option>
+        </select>
+      </label>
+
+      <section class="actions" aria-label="Poortfuncties">
+        <span class="eyebrow">BEDIENING</span>
+        <div class="button-row" id="port-actions" hidden>
+          <button id="port-on" type="button" disabled>Poort aan</button>
+          <button id="port-off" type="button" disabled>Poort uit</button>
+        </div>
+        <div class="button-row" id="poe-actions" hidden>
+          <button id="poe-on" type="button" disabled>PoE aan</button>
+          <button id="poe-off" type="button" disabled>PoE uit</button>
+        </div>
+        <div class="button-row" id="wan-actions" hidden>
+          <button id="wan-on" type="button" disabled>WAN verbinden</button>
+          <button id="wan-off" type="button" disabled>WAN verbreken</button>
+          <label class="check"><input id="wan-ipv6" type="checkbox"> IPv6</label>
+        </div>
+        <div class="button-row" id="recover-actions" hidden>
+          <button id="poe-recover" type="button" disabled>PoE herstellen</button>
+        </div>
+        <p class="action-note" id="action-note">Selecteer een apparaat en poort.</p>
+      </section>
+    </section>
+
+    <aside class="info" aria-live="polite">
+      <div class="info-heading">
+        <div>
+          <span class="eyebrow">STATUS</span>
+          <h2 id="info-name">Omada</h2>
+        </div>
+        <span class="status-pill" id="info-status">—</span>
+      </div>
+      <dl>
+        <div><dt>Type / model</dt><dd id="info-model">—</dd></div>
+        <div><dt>IP-adres</dt><dd id="info-ip">—</dd></div>
+        <div><dt>MAC-adres</dt><dd id="info-mac">—</dd></div>
+        <div><dt>Poort</dt><dd id="info-port">Selecteer een poort</dd></div>
+        <div><dt>Verbinding</dt><dd id="info-link">—</dd></div>
+        <div><dt>PoE / verbruik</dt><dd id="info-poe">—</dd></div>
+        <div><dt>Firmware</dt><dd id="info-firmware">—</dd></div>
+      </dl>
+      <p class="message" id="message" role="status">Verbinden met Omada…</p>
+    </aside>
+  </main>
+</body>
+</html>

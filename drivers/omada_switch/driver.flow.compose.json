@@ -1,0 +1,40 @@
+{
+  "actions": [
+    {
+      "id": "switch_poe_on",
+      "title": { "en": "Enable PoE on port [[port]]", "nl": "Zet PoE op poort [[port]] aan" },
+      "titleFormatted": { "en": "Enable PoE on port [[port]]", "nl": "Zet PoE op poort [[port]] aan" },
+      "args": [{ "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }]
+    },
+    {
+      "id": "switch_poe_off",
+      "title": { "en": "Disable PoE on port [[port]]", "nl": "Zet PoE op poort [[port]] uit" },
+      "titleFormatted": { "en": "Disable PoE on port [[port]]", "nl": "Zet PoE op poort [[port]] uit" },
+      "args": [{ "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }]
+    },
+    {
+      "id": "switch_poe_recover",
+      "title": { "en": "Recover PoE on port [[port]]", "nl": "Herstel PoE op poort [[port]]" },
+      "titleFormatted": { "en": "Recover PoE on port [[port]]", "nl": "Herstel PoE op poort [[port]]" },
+      "args": [{ "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "omada_device_online",
+      "title": { "en": "This switch is online", "nl": "Deze switch is online" }
+    },
+    {
+      "id": "switch_port_connected",
+      "title": { "en": "Port [[port]] has a connection", "nl": "Poort [[port]] heeft verbinding" },
+      "titleFormatted": { "en": "Port [[port]] has a connection", "nl": "Poort [[port]] heeft verbinding" },
+      "args": [{ "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }]
+    },
+    {
+      "id": "switch_poe_enabled",
+      "title": { "en": "PoE is enabled on port [[port]]", "nl": "PoE staat aan op poort [[port]]" },
+      "titleFormatted": { "en": "PoE is enabled on port [[port]]", "nl": "PoE staat aan op poort [[port]]" },
+      "args": [{ "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }]
+    }
+  ]
+}

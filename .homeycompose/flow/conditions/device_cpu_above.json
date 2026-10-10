@@ -1,0 +1,9 @@
+{
+  "id": "device_cpu_above",
+  "title": { "en": "Omada device [[device]] CPU is at least [[percentage]]%", "nl": "CPU van Omada-apparaat [[device]] is minstens [[percentage]]%" },
+  "titleFormatted": { "en": "Omada device [[device]] CPU is at least [[percentage]]%", "nl": "CPU van Omada-apparaat [[device]] is minstens [[percentage]]%" },
+  "args": [
+    { "type": "device", "name": "device" },
+    { "type": "number", "name": "percentage", "title": { "en": "Percentage", "nl": "Percentage" }, "min": 0, "max": 100 }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": {
+    "en": "Omada Client",
+    "nl": "Omada-client"
+  },
+  "class": "other",
+  "capabilities": [],
+  "connectivity": [
+    "lan"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "images": {
+    "small": "/drivers/omada_client/assets/images/small.png",
+    "large": "/drivers/omada_client/assets/images/large.png"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "1.1.0": {
+    "en": "Renamed the app, added Omada client actions, client presence flow triggers, firmware upgrade action, and switch PoE power measurement.",
+    "nl": "App hernoemd, Omada-clientacties en client-aanwezigheidsflows toegevoegd, firmware-updateactie en PoE-vermogensmeting van switches."
+  },
+  "1.2.0": {
+    "en": "Added paired controller and wireless client devices, firmware information, gateway port conditions and controls, and switch port controls.",
+    "nl": "Omada-controller en draadloze clients als apparaten toegevoegd, firmwaregegevens, gatewaypoortcondities en -bediening, en switchpoortbediening."
+  },
+  "1.3.0": {
+    "en": "Fixed the port-control widget loading flow and added gateway and EAP port information, PoE controls, switch port controls, and WAN connection controls.",
+    "nl": "Widget laden hersteld en gateway- en EAP-poortinformatie, PoE-bediening, switchpoortbediening en WAN-verbindingsbediening toegevoegd."
+  },
+  "1.4.0": {
+    "en": "Added online detection, client online, CPU and memory, and per-port PoE power flow conditions.",
+    "nl": "Flowvoorwaarden toegevoegd voor internetdetectie, online status van clients, CPU- en geheugengebruik en PoE-verbruik per poort."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": {
+    "en": "Omada Controller",
+    "nl": "Omada-controller"
+  },
+  "class": "other",
+  "capabilities": [],
+  "connectivity": [
+    "lan"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "images": {
+    "small": "/drivers/omada_controller/assets/images/small.png",
+    "large": "/drivers/omada_controller/assets/images/large.png"
+  }
+}

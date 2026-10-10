@@ -1,0 +1,9 @@
+{
+  "id": "gateway_poe_active",
+  "title": { "en": "Gateway [[mac]] port [[port]] is delivering PoE", "nl": "Gatewaypoort [[port]] op [[mac]] levert PoE" },
+  "titleFormatted": { "en": "Gateway [[mac]] port [[port]] is delivering PoE", "nl": "Gatewaypoort [[port]] op [[mac]] levert PoE" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Gateway MAC address", "nl": "MAC-adres van gateway" } },
+    { "type": "number", "name": "port", "title": { "en": "Port", "nl": "Poortnummer" }, "min": 1 }
+  ]
+}

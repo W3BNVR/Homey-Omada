@@ -1,0 +1,8 @@
+{
+  "id": "client_unblock",
+  "title": { "en": "Unblock Omada client [[mac]]", "nl": "Deblokkeer Omada-client [[mac]]" },
+  "titleFormatted": { "en": "Unblock Omada client [[mac]]", "nl": "Deblokkeer Omada-client [[mac]]" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Client MAC address", "nl": "MAC-adres van client" } }
+  ]
+}

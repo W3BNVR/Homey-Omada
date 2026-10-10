@@ -1,0 +1,10 @@
+{
+  "id": "gateway_wan_connect",
+  "title": { "en": "Connect WAN port [[port]] on gateway [[mac]], IPv6 [[ipv6]]", "nl": "Verbind WAN-poort [[port]] op gateway [[mac]], IPv6 [[ipv6]]" },
+  "titleFormatted": { "en": "Connect WAN port [[port]] on gateway [[mac]], IPv6 [[ipv6]]", "nl": "Verbind WAN-poort [[port]] op gateway [[mac]], IPv6 [[ipv6]]" },
+  "args": [
+    { "type": "text", "name": "mac", "title": { "en": "Gateway MAC address", "nl": "MAC-adres van gateway" } },
+    { "type": "number", "name": "port", "title": { "en": "WAN port", "nl": "WAN-poortnummer" }, "min": 1 },
+    { "type": "checkbox", "name": "ipv6", "title": { "en": "Control IPv6", "nl": "IPv6 bedienen" } }
+  ]
+}
