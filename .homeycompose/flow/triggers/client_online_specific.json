@@ -1,8 +1,9 @@
 {
   "title": { "en": "When a specific client comes online", "nl": "Wanneer een specifieke client online komt" },
-  "titleFormatted": { "en": "When [[client]] comes online", "nl": "Wanneer [[client]] online komt" },
+  "titleFormatted": { "en": "When [[device_label]] ([[mac]]) comes online", "nl": "Wanneer [[device_label]] ([[mac]]) online komt" },
   "args": [
-    { "name": "client", "type": "autocomplete", "title": { "en": "Client", "nl": "Client" }, "placeholder": { "en": "Search by name or MAC", "nl": "Zoek op naam of MAC-adres" } }
+    { "name": "mac", "type": "text", "title": { "en": "Client MAC address", "nl": "MAC-adres van de client" }, "placeholder": { "en": "For example AA-BB-CC-DD-EE-FF", "nl": "Bijvoorbeeld AA-BB-CC-DD-EE-FF" } },
+    { "name": "device_label", "type": "text", "title": { "en": "Personal label (only shown on this card)", "nl": "Persoonlijke omschrijving (alleen zichtbaar op deze kaart)" }, "placeholder": { "en": "For example: Pixel Watch", "nl": "Bijvoorbeeld: Pixel Watch" } }
   ],
   "tokens": [
     { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },

@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.mnapj.omada",
-  "version": "1.4.19",
+  "version": "1.4.20",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "runtime": "nodejs",
@@ -109,20 +109,32 @@
           "nl": "Wanneer een specifieke client offline gaat"
         },
         "titleFormatted": {
-          "en": "When [[client]] goes offline",
-          "nl": "Wanneer [[client]] offline gaat"
+          "en": "When [[device_label]] ([[mac]]) goes offline",
+          "nl": "Wanneer [[device_label]] ([[mac]]) offline gaat"
         },
         "args": [
           {
-            "name": "client",
-            "type": "autocomplete",
+            "name": "mac",
+            "type": "text",
             "title": {
-              "en": "Client",
-              "nl": "Client"
+              "en": "Client MAC address",
+              "nl": "MAC-adres van de client"
             },
             "placeholder": {
-              "en": "Search by name or MAC",
-              "nl": "Zoek op naam of MAC-adres"
+              "en": "For example AA-BB-CC-DD-EE-FF",
+              "nl": "Bijvoorbeeld AA-BB-CC-DD-EE-FF"
+            }
+          },
+          {
+            "name": "device_label",
+            "type": "text",
+            "title": {
+              "en": "Personal label (only shown on this card)",
+              "nl": "Persoonlijke omschrijving (alleen zichtbaar op deze kaart)"
+            },
+            "placeholder": {
+              "en": "For example: Pixel Watch",
+              "nl": "Bijvoorbeeld: Pixel Watch"
             }
           }
         ],
@@ -160,20 +172,32 @@
           "nl": "Wanneer een specifieke client online komt"
         },
         "titleFormatted": {
-          "en": "When [[client]] comes online",
-          "nl": "Wanneer [[client]] online komt"
+          "en": "When [[device_label]] ([[mac]]) comes online",
+          "nl": "Wanneer [[device_label]] ([[mac]]) online komt"
         },
         "args": [
           {
-            "name": "client",
-            "type": "autocomplete",
+            "name": "mac",
+            "type": "text",
             "title": {
-              "en": "Client",
-              "nl": "Client"
+              "en": "Client MAC address",
+              "nl": "MAC-adres van de client"
             },
             "placeholder": {
-              "en": "Search by name or MAC",
-              "nl": "Zoek op naam of MAC-adres"
+              "en": "For example AA-BB-CC-DD-EE-FF",
+              "nl": "Bijvoorbeeld AA-BB-CC-DD-EE-FF"
+            }
+          },
+          {
+            "name": "device_label",
+            "type": "text",
+            "title": {
+              "en": "Personal label (only shown on this card)",
+              "nl": "Persoonlijke omschrijving (alleen zichtbaar op deze kaart)"
+            },
+            "placeholder": {
+              "en": "For example: Pixel Watch",
+              "nl": "Bijvoorbeeld: Pixel Watch"
             }
           }
         ],
