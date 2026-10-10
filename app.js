@@ -119,13 +119,27 @@ module.exports = class OmadaControllerApp extends Homey.App {
       const row = await this.getSwitchPort(device, port);
       return Number(row.poe) === 1;
     });
+    const autocompleteClient = async query => {
+      const siteId = await this.resolveSiteId();
+      const knownClients = await this.getOmadaClient().listKnownClients(siteId);
+      const needle = String(query || '').trim().toLowerCase();
+      return knownClients.map(item => {
+        const mac = String(item.mac || item.macAddress || '').toUpperCase().replaceAll(':', '-');
+        const name = String(item.name || item.hostName || item.hostname || mac);
+        const ip = String(item.ip || item.ipAddress || '');
+        return { name: `${name} · ${mac}`, description: ip, id: mac };
+      }).filter(item => item.id && (!needle || item.name.toLowerCase().includes(needle) || item.id.toLowerCase().includes(needle)));
+    };
     const matchesClientMac = (args, state) => {
-      const selectedMac = String(args.device?.getData()?.mac || '').toUpperCase().replaceAll(':', '-');
+      const selectedMac = String(args.client?.id || args.client?.mac || args.client || '').toUpperCase().replaceAll(':', '-');
       const eventMac = String(state?.mac || '').toUpperCase().replaceAll(':', '-');
       return Boolean(selectedMac && eventMac && selectedMac === eventMac);
     };
-    flow.getTriggerCard('client_online_specific').registerRunListener(matchesClientMac);
-    flow.getTriggerCard('client_offline_specific').registerRunListener(matchesClientMac);
+    for (const id of ['client_online_specific', 'client_offline_specific']) {
+      const card = flow.getTriggerCard(id);
+      card.registerArgumentAutocompleteListener('client', autocompleteClient);
+      card.registerRunListener(matchesClientMac);
+    }
   }
 
   async resolveSiteId() {
