@@ -1,9 +1,10 @@
 {
   "name": { "en": "Omada port control", "nl": "Omada-poortbeheer" },
   "height": 280,
+  "devices": { "type": "app", "singular": true },
   "settings": [],
   "api": {
-    "getDevices": { "method": "GET", "path": "/devices" },
+    "getDevice": { "method": "GET", "path": "/device/:deviceId" },
     "setPoeMode": { "method": "PUT", "path": "/poe/:deviceType/:siteId/:switchMac/:port" },
     "setPortEnabled": { "method": "PUT", "path": "/port/:siteId/:switchMac/:port" },
     "setGatewayWanConnected": { "method": "PUT", "path": "/wan/:siteId/:switchMac/:port" },

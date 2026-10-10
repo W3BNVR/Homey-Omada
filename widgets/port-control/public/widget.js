@@ -124,24 +124,21 @@ function initializeOmadaWidget(Homey) {
     loading = true;
     setButtons(false);
     try {
+      const selectedIds = Homey.getDeviceIds();
+      if (!Array.isArray(selectedIds) || !selectedIds.length) {
+        throw new Error('Open de widgetinstellingen en selecteer één Omada-apparaat.');
+      }
       const result = await Promise.race([
-        api('GET', '/devices'),
+        api('GET', `/device/${encodeURIComponent(selectedIds[0])}`),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Omada reageert niet binnen 20 seconden.')), 20000)),
       ]);
-      devices = (result.devices || []).filter(device => typeGroup(device.type));
-      const select = $('device');
-      select.replaceChildren();
-      if (!devices.length) {
-        select.add(new Option(result.needsSiteId ? 'Vul Site ID in bij instellingen' : 'Geen Omada-apparaten gevonden', ''));
-        renderDevice(null);
-        $('message').textContent = result.needsSiteId ? 'Meerdere sites gevonden: stel een Site ID in bij de app.' : 'Controleer de verbinding en API-rechten.';
-      } else {
-        devices.forEach((device, index) => select.add(new Option(`${typeGroup(device.type).toUpperCase()} · ${device.name}`, String(index))));
-        renderDevice(devices[0]);
-        $('message').textContent = `${devices.length} apparaat${devices.length === 1 ? '' : 'en'} gevonden`;
-      }
+      devices = [result.device].filter(device => device && typeGroup(device.type));
+      if (!devices.length) throw new Error('Het gekozen apparaat wordt niet ondersteund.');
+      $('device-name').textContent = `${typeGroup(devices[0].type).toUpperCase()} · ${devices[0].name}`;
+      renderDevice(devices[0]);
+      $('message').textContent = 'Apparaatgegevens bijgewerkt';
     } catch (error) {
-      $('device').replaceChildren(new Option('Controller niet bereikbaar', ''));
+      $('device-name').textContent = 'Apparaat niet beschikbaar';
       renderDevice(null);
       $('message').textContent = error.message || 'Verbinding met Omada mislukt.';
     } finally {
@@ -174,7 +171,6 @@ function initializeOmadaWidget(Homey) {
     }
   }
 
-  $('device').addEventListener('change', event => renderDevice(devices[Number(event.target.value)]));
   $('port').addEventListener('change', event => {
     const port = currentDevice?.ports?.[Number(event.target.value)];
     renderPort(port, port ? portNumber(port, Number(event.target.value)) : '');
