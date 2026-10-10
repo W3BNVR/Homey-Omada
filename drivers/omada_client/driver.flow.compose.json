@@ -1,0 +1,22 @@
+{
+  "triggers": [
+    {
+      "id": "client_came_online",
+      "title": { "en": "This client comes online", "nl": "Deze client komt online" },
+      "tokens": [
+        { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
+        { "name": "name", "type": "string", "title": { "en": "Client name", "nl": "Clientnaam" } },
+        { "name": "ip", "type": "string", "title": { "en": "IP address", "nl": "IP-adres" } }
+      ]
+    },
+    {
+      "id": "client_went_offline",
+      "title": { "en": "This client goes offline", "nl": "Deze client gaat offline" },
+      "tokens": [
+        { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
+        { "name": "name", "type": "string", "title": { "en": "Client name", "nl": "Clientnaam" } },
+        { "name": "ip", "type": "string", "title": { "en": "IP address", "nl": "IP-adres" } }
+      ]
+    }
+  ]
+}

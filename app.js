@@ -178,11 +178,24 @@ module.exports = class OmadaControllerApp extends Homey.App {
     if (this.clientSnapshot) {
       const connected = this.homey.flow.getTriggerCard('client_connected');
       const disconnected = this.homey.flow.getTriggerCard('client_disconnected');
+      const clientDriver = this.homey.drivers.getDriver('omada_client');
+      const pairedClients = new Map(clientDriver.getDevices().map(device => {
+        const mac = String(device.getData().mac || '').toUpperCase().replaceAll(':', '-');
+        return [mac, device];
+      }).filter(([mac]) => Boolean(mac)));
       for (const [mac, client] of current) {
-        if (!this.clientSnapshot.has(mac)) await connected.trigger(client);
+        if (!this.clientSnapshot.has(mac)) {
+          await connected.trigger(client);
+          const device = pairedClients.get(mac);
+          if (device) await clientDriver.triggerClientPresence(device, true, client);
+        }
       }
       for (const [mac, client] of this.clientSnapshot) {
-        if (!current.has(mac)) await disconnected.trigger(client);
+        if (!current.has(mac)) {
+          await disconnected.trigger(client);
+          const device = pairedClients.get(mac);
+          if (device) await clientDriver.triggerClientPresence(device, false, client);
+        }
       }
     }
     this.clientSnapshot = current;
