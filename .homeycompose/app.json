@@ -1,6 +1,6 @@
 {
   "id": "com.mnapj.omada",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "runtime": "nodejs",

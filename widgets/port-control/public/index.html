@@ -66,6 +66,19 @@
     </aside>
   </main>
   <script src="/widget.js"></script>
+  <script>
+    function onHomeyReady(Homey) {
+      Homey.ready({ height: 280 });
+      try {
+        if (typeof window.initializeOmadaWidget !== 'function') {
+          throw new Error('Widget-script is niet geladen.');
+        }
+        window.initializeOmadaWidget(Homey);
+      } catch (error) {
+        document.getElementById('message').textContent = error.message || 'Widget starten is mislukt.';
+      }
+    }
+  </script>
   <script src="/homey.js" data-origin="widget"></script>
 </body>
 </html>

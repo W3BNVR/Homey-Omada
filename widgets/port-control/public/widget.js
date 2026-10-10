@@ -1,12 +1,11 @@
 'use strict';
 
-function onHomeyReady(Homey) {
+function initializeOmadaWidget(Homey) {
   const $ = id => document.getElementById(id);
   let devices = [];
   let currentDevice = null;
   let loading = false;
 
-  Homey.ready({ height: 280 });
   $('message').textContent = 'Verbinden met Omada…';
 
   function api(method, path, body) {
@@ -191,3 +190,5 @@ function onHomeyReady(Homey) {
 
   load();
 }
+
+window.initializeOmadaWidget = initializeOmadaWidget;
