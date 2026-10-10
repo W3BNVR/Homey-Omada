@@ -119,6 +119,19 @@ module.exports = class OmadaControllerApp extends Homey.App {
       const row = await this.getSwitchPort(device, port);
       return Number(row.poe) === 1;
     });
+    const autocompleteClient = async query => {
+      const siteId = await this.resolveSiteId();
+      const clients = await this.getOmadaClient().listClients(siteId);
+      const needle = String(query || '').trim().toLowerCase();
+      return clients.map(item => {
+        const mac = String(item.mac || item.macAddress || item.clientMac || '').toUpperCase().replaceAll(':', '-');
+        const name = String(item.name || item.clientName || item.hostName || item.hostname || mac);
+        const ip = String(item.ip || item.ipAddress || '');
+        return { id: mac, name: `${name} (${mac})`, description: ip };
+      }).filter(item => item.id && (!needle
+        || item.name.toLowerCase().includes(needle)
+        || item.id.toLowerCase().includes(needle)));
+    };
     const matchesClient = (args, state) => {
       const selectedClient = String(args.client?.id || args.client || '').trim();
       const selectedMac = selectedClient.toUpperCase().replace(/[:-]/g, '');
@@ -131,6 +144,7 @@ module.exports = class OmadaControllerApp extends Homey.App {
     };
     for (const id of ['client_online_specific', 'client_offline_specific']) {
       const card = flow.getTriggerCard(id);
+      card.registerArgumentAutocompleteListener('client', autocompleteClient);
       card.registerRunListener(matchesClient);
     }
   }
