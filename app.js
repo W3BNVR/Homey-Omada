@@ -120,12 +120,9 @@ module.exports = class OmadaControllerApp extends Homey.App {
       return Number(row.poe) === 1;
     });
     const matchesClientMac = (args, state) => {
-      const selectedClient = String(args.client || '').trim();
-      const selectedMac = selectedClient.toUpperCase().replace(/[:-]/g, '');
+      const selectedMac = String(args.device?.getData()?.mac || '').toUpperCase().replace(/[:-]/g, '');
       const eventMac = String(state?.mac || '').toUpperCase().replace(/[:-]/g, '');
-      if (!selectedClient) return false;
-      if (/^[0-9A-F]{12}$/.test(selectedMac)) return selectedMac === eventMac;
-      return selectedClient.toLowerCase() === String(state?.name || '').trim().toLowerCase();
+      return Boolean(selectedMac && eventMac && selectedMac === eventMac);
     };
     for (const id of ['client_online_specific', 'client_offline_specific']) {
       const card = flow.getTriggerCard(id);

@@ -1,8 +1,8 @@
 {
   "title": { "en": "When a specific client comes online", "nl": "Wanneer een specifieke client online komt" },
-  "titleFormatted": { "en": "When [[client]] comes online", "nl": "Wanneer [[client]] online komt" },
+  "titleFormatted": { "en": "When [[device]] comes online", "nl": "Wanneer [[device]] online komt" },
   "args": [
-    { "name": "client", "type": "text", "title": { "en": "Client name or MAC address", "nl": "Clientnaam of MAC-adres" } }
+    { "name": "device", "type": "device", "title": { "en": "Omada client", "nl": "Omada-client" }, "filter": "driver_id=omada_client" }
   ],
   "tokens": [
     { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
