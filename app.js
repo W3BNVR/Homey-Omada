@@ -121,7 +121,10 @@ module.exports = class OmadaControllerApp extends Homey.App {
     });
     const autocompleteClient = async query => {
       const siteId = await this.resolveSiteId();
-      const knownClients = await this.getOmadaClient().listKnownClients(siteId);
+      // Use the documented Open API client endpoint here. The Controller's
+      // internal insight endpoint can reject API clients with a site-access
+      // error even though their Open API credentials can read live clients.
+      const knownClients = await this.getOmadaClient().listConnectedClients(siteId);
       const needle = String(query || '').trim().toLowerCase();
       return knownClients.map(item => {
         const mac = String(item.mac || item.macAddress || '').toUpperCase().replaceAll(':', '-');
