@@ -1,0 +1,12 @@
+{
+  "title": { "en": "When a specific client comes online", "nl": "Wanneer een specifieke client online komt" },
+  "titleFormatted": { "en": "When [[client]] comes online", "nl": "Wanneer [[client]] online komt" },
+  "args": [
+    { "name": "client", "type": "autocomplete", "title": { "en": "Client", "nl": "Client" }, "placeholder": { "en": "Select a paired Omada client", "nl": "Selecteer een gekoppelde Omada-client" } }
+  ],
+  "tokens": [
+    { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
+    { "name": "name", "type": "string", "title": { "en": "Client name", "nl": "Clientnaam" } },
+    { "name": "ip", "type": "string", "title": { "en": "IP address", "nl": "IP-adres" } }
+  ]
+}
