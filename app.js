@@ -119,6 +119,13 @@ module.exports = class OmadaControllerApp extends Homey.App {
       const row = await this.getSwitchPort(device, port);
       return Number(row.poe) === 1;
     });
+    const matchesClientMac = (args, state) => {
+      const selectedMac = String(args.device?.getData()?.mac || '').toUpperCase().replaceAll(':', '-');
+      const eventMac = String(state?.mac || '').toUpperCase().replaceAll(':', '-');
+      return Boolean(selectedMac && eventMac && selectedMac === eventMac);
+    };
+    flow.getTriggerCard('client_online_specific').registerRunListener(matchesClientMac);
+    flow.getTriggerCard('client_offline_specific').registerRunListener(matchesClientMac);
   }
 
   async resolveSiteId() {
@@ -178,23 +185,18 @@ module.exports = class OmadaControllerApp extends Homey.App {
     if (this.clientSnapshot) {
       const connected = this.homey.flow.getTriggerCard('client_connected');
       const disconnected = this.homey.flow.getTriggerCard('client_disconnected');
-      const clientDriver = this.homey.drivers.getDriver('omada_client');
-      const pairedClients = new Map(clientDriver.getDevices().map(device => {
-        const mac = String(device.getData().mac || '').toUpperCase().replaceAll(':', '-');
-        return [mac, device];
-      }).filter(([mac]) => Boolean(mac)));
+      const specificConnected = this.homey.flow.getTriggerCard('client_online_specific');
+      const specificDisconnected = this.homey.flow.getTriggerCard('client_offline_specific');
       for (const [mac, client] of current) {
         if (!this.clientSnapshot.has(mac)) {
           await connected.trigger(client);
-          const device = pairedClients.get(mac);
-          if (device) await clientDriver.triggerClientPresence(device, true, client);
+          await specificConnected.trigger(client, { mac });
         }
       }
       for (const [mac, client] of this.clientSnapshot) {
         if (!current.has(mac)) {
           await disconnected.trigger(client);
-          const device = pairedClients.get(mac);
-          if (device) await clientDriver.triggerClientPresence(device, false, client);
+          await specificDisconnected.trigger(client, { mac });
         }
       }
     }

@@ -1,0 +1,12 @@
+{
+  "title": { "en": "When [[device]] comes online", "nl": "Wanneer [[device]] online komt" },
+  "titleFormatted": { "en": "When [[device]] comes online", "nl": "Wanneer [[device]] online komt" },
+  "args": [
+    { "name": "device", "type": "device", "title": { "en": "Client", "nl": "Client" }, "filter": "driver_id=omada_client" }
+  ],
+  "tokens": [
+    { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
+    { "name": "name", "type": "string", "title": { "en": "Client name", "nl": "Clientnaam" } },
+    { "name": "ip", "type": "string", "title": { "en": "IP address", "nl": "IP-adres" } }
+  ]
+}
