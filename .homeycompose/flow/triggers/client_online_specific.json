@@ -2,7 +2,7 @@
   "title": { "en": "When a specific client comes online", "nl": "Wanneer een specifieke client online komt" },
   "titleFormatted": { "en": "When [[client]] comes online", "nl": "Wanneer [[client]] online komt" },
   "args": [
-    { "name": "client", "type": "autocomplete", "title": { "en": "Client", "nl": "Client" }, "placeholder": { "en": "Search by name or MAC", "nl": "Zoek op naam of MAC-adres" } }
+    { "name": "client", "type": "text", "title": { "en": "Client name or MAC address", "nl": "Clientnaam of MAC-adres" } }
   ],
   "tokens": [
     { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },
