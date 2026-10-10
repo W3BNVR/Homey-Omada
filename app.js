@@ -119,15 +119,6 @@ module.exports = class OmadaControllerApp extends Homey.App {
       const row = await this.getSwitchPort(device, port);
       return Number(row.poe) === 1;
     });
-    const matchesClientMac = (args, state) => {
-      const selectedMac = String(args.device?.getData()?.mac || '').toUpperCase().replace(/[:-]/g, '');
-      const eventMac = String(state?.mac || '').toUpperCase().replace(/[:-]/g, '');
-      return Boolean(selectedMac && eventMac && selectedMac === eventMac);
-    };
-    for (const id of ['client_online_specific', 'client_offline_specific']) {
-      const card = flow.getTriggerCard(id);
-      card.registerRunListener(matchesClientMac);
-    }
   }
 
   async resolveSiteId() {
@@ -187,18 +178,21 @@ module.exports = class OmadaControllerApp extends Homey.App {
     if (this.clientSnapshot) {
       const connected = this.homey.flow.getTriggerCard('client_connected');
       const disconnected = this.homey.flow.getTriggerCard('client_disconnected');
-      const specificConnected = this.homey.flow.getTriggerCard('client_online_specific');
-      const specificDisconnected = this.homey.flow.getTriggerCard('client_offline_specific');
+      const specificConnected = this.homey.flow.getDeviceTriggerCard('client_online_specific');
+      const specificDisconnected = this.homey.flow.getDeviceTriggerCard('client_offline_specific');
+      const pairedClients = this.homey.drivers.getDriver('omada_client').getDevices();
       for (const [mac, client] of current) {
         if (!this.clientSnapshot.has(mac)) {
           await connected.trigger(client);
-          await specificConnected.trigger(client, { mac, name: client.name });
+          const device = pairedClients.find(item => String(item.getData().mac || '').toUpperCase().replace(/[:-]/g, '') === mac.replace(/[:-]/g, ''));
+          if (device) await specificConnected.trigger(device, client, { mac, name: client.name });
         }
       }
       for (const [mac, client] of this.clientSnapshot) {
         if (!current.has(mac)) {
           await disconnected.trigger(client);
-          await specificDisconnected.trigger(client, { mac, name: client.name });
+          const device = pairedClients.find(item => String(item.getData().mac || '').toUpperCase().replace(/[:-]/g, '') === mac.replace(/[:-]/g, ''));
+          if (device) await specificDisconnected.trigger(device, client, { mac, name: client.name });
         }
       }
     }
