@@ -26,8 +26,30 @@ function initializeOmadaWidget(Homey) {
     return String(port?.port ?? port?.portNumber ?? port?.portId ?? port?.lanPort ?? port?.name ?? index + 1);
   }
 
+  function flag(value) {
+    return value === true || value === 1 || ['true', '1', 'yes', 'on'].includes(String(value).toLowerCase());
+  }
+
+  function portEnabled(port) {
+    if (port?.disabled !== undefined && port.disabled !== null) return !flag(port.disabled);
+    if (port?.connectedStatus !== undefined && port.connectedStatus !== null) return Number(port.connectedStatus) !== 2;
+    return true;
+  }
+
+  function poeEnabled(port) {
+    const value = port?.poeStatus ?? port?.poeOutEnable ?? port?.poeMode ?? port?.poe;
+    return value !== undefined && value !== null && isOn(value);
+  }
+
+  function updateToggle(button, label, enabled) {
+    button.textContent = label;
+    button.classList.toggle('is-on', enabled);
+    button.classList.toggle('is-off', !enabled);
+    button.setAttribute('aria-pressed', String(enabled));
+  }
+
   function setButtons(enabled) {
-    ['port-on', 'port-off', 'poe-on', 'poe-off', 'poe-recover', 'wan-on', 'wan-off']
+    ['port-toggle', 'poe-toggle', 'poe-recover', 'wan-on', 'wan-off']
       .forEach(id => { $(id).disabled = !enabled || loading; });
   }
 
@@ -54,13 +76,15 @@ function initializeOmadaWidget(Homey) {
     $('poe-actions').hidden = !poePort;
     $('recover-actions').hidden = !switchPort || !poePort;
     $('wan-actions').hidden = !gatewayWan;
+    if (hasPort && switchPort) updateToggle($('port-toggle'), portEnabled(port) ? 'Poort aan' : 'Poort uit', portEnabled(port));
+    if (hasPort && poePort) updateToggle($('poe-toggle'), poeEnabled(port) ? 'PoE aan' : 'PoE uit', poeEnabled(port));
     if (!device) $('action-note').textContent = 'Selecteer een apparaat in de widgetinstellingen.';
     else if (!hasPort) $('action-note').textContent = device.ports?.length ? 'Selecteer een poort om te bedienen.' : 'Geen poortinformatie beschikbaar.';
     else if (type === 'eap' && !poePort) $('action-note').textContent = 'Deze EAP-poort is alleen informatief.';
     else $('action-note').textContent = type === 'gateway' ? 'Beschikbare gatewayacties' : 'Kies een actie';
     setButtons(hasPort);
-    if (!switchPort) ['port-on', 'port-off', 'poe-recover'].forEach(id => { $(id).disabled = true; });
-    if (!poePort) ['poe-on', 'poe-off'].forEach(id => { $(id).disabled = true; });
+    if (!switchPort) ['port-toggle', 'poe-recover'].forEach(id => { $(id).disabled = true; });
+    if (!poePort) $('poe-toggle').disabled = true;
     if (!gatewayWan) ['wan-on', 'wan-off'].forEach(id => { $(id).disabled = true; });
   }
 
@@ -156,10 +180,14 @@ function initializeOmadaWidget(Homey) {
     renderPort(port);
     renderActions(currentDevice, port);
   });
-  $('port-on').addEventListener('click', () => runAction('Poort inschakelen', 'PUT', (site, mac, port) => `/port/${site}/${mac}/${port}`, { enabled: true }));
-  $('port-off').addEventListener('click', () => runAction('Poort uitschakelen', 'PUT', (site, mac, port) => `/port/${site}/${mac}/${port}`, { enabled: false }));
-  $('poe-on').addEventListener('click', () => runAction('PoE inschakelen', 'PUT', (site, mac, port, type) => `/poe/${type}/${site}/${mac}/${port}`, { enabled: true }));
-  $('poe-off').addEventListener('click', () => runAction('PoE uitschakelen', 'PUT', (site, mac, port, type) => `/poe/${type}/${site}/${mac}/${port}`, { enabled: false }));
+  $('port-toggle').addEventListener('click', () => {
+    const enabled = !portEnabled(currentDevice?.ports?.[Number($('port').value)]);
+    runAction(enabled ? 'Poort inschakelen' : 'Poort uitschakelen', 'PUT', (site, mac, port) => `/port/${site}/${mac}/${port}`, { enabled });
+  });
+  $('poe-toggle').addEventListener('click', () => {
+    const enabled = !poeEnabled(currentDevice?.ports?.[Number($('port').value)]);
+    runAction(enabled ? 'PoE inschakelen' : 'PoE uitschakelen', 'PUT', (site, mac, port, type) => `/poe/${type}/${site}/${mac}/${port}`, { enabled });
+  });
   $('poe-recover').addEventListener('click', () => runAction('PoE herstellen', 'POST', (site, mac) => `/poe-recovery/${site}/${mac}`, (_, port) => ({ ports: [Number(port)] })));
   $('wan-on').addEventListener('click', () => runAction('WAN verbinden', 'PUT', (site, mac, port) => `/wan/${site}/${mac}/${port}`, { connected: true, ipv6: $('wan-ipv6').checked }));
   $('wan-off').addEventListener('click', () => runAction('WAN verbreken', 'PUT', (site, mac, port) => `/wan/${site}/${mac}/${port}`, { connected: false, ipv6: $('wan-ipv6').checked }));

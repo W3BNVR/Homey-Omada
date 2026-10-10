@@ -43,6 +43,8 @@ select:disabled { opacity: .58; }
 .action-button { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 0; min-height: 38px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 10px; background: var(--card-soft); font-size: 11px; font-weight: 670; }
 .action-button.primary { border-color: color-mix(in srgb, var(--green) 38%, var(--line)); background: color-mix(in srgb, var(--green) 12%, var(--card)); }
 .action-button.danger { border-color: color-mix(in srgb, var(--red) 25%, var(--line)); }
+.action-button.state-toggle.is-on { border-color: color-mix(in srgb, var(--green) 42%, var(--line)); background: color-mix(in srgb, var(--green) 13%, var(--card)); }
+.action-button.state-toggle.is-off { border-color: color-mix(in srgb, var(--red) 30%, var(--line)); background: color-mix(in srgb, var(--red) 8%, var(--card)); }
 .action-button:disabled { opacity: .45; }
 .button-icon { color: var(--green); font-size: 15px; line-height: 1; }
 .danger .button-icon { color: var(--red); }

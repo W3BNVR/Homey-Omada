@@ -34,12 +34,10 @@
     <section class="actions" aria-label="Bediening">
       <div class="section-heading"><span>Bediening</span><span class="section-hint" id="action-note">Selecteer een poort</span></div>
       <div class="button-grid" id="port-actions" hidden>
-        <button class="action-button" id="port-on" type="button" disabled><span class="button-icon">↗</span>Poort aan</button>
-        <button class="action-button danger" id="port-off" type="button" disabled><span class="button-icon">↘</span>Poort uit</button>
+        <button class="action-button state-toggle" id="port-toggle" type="button" disabled aria-pressed="false">Poortstatus laden…</button>
       </div>
       <div class="button-grid" id="poe-actions" hidden>
-        <button class="action-button primary" id="poe-on" type="button" disabled><span class="button-icon">ϟ</span>PoE aan</button>
-        <button class="action-button danger" id="poe-off" type="button" disabled><span class="button-icon">ϟ</span>PoE uit</button>
+        <button class="action-button state-toggle" id="poe-toggle" type="button" disabled aria-pressed="false">PoE-status laden…</button>
       </div>
       <div class="button-grid" id="wan-actions" hidden>
         <button class="action-button primary" id="wan-on" type="button" disabled>WAN verbinden</button>
