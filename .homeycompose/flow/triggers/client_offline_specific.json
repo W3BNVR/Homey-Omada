@@ -2,7 +2,7 @@
   "title": { "en": "When a specific client goes offline", "nl": "Wanneer een specifieke client offline gaat" },
   "titleFormatted": { "en": "When [[client]] goes offline", "nl": "Wanneer [[client]] offline gaat" },
   "args": [
-    { "name": "client", "type": "autocomplete", "title": { "en": "Client", "nl": "Client" }, "placeholder": { "en": "Select a paired Omada client", "nl": "Selecteer een gekoppelde Omada-client" } }
+    { "name": "client", "type": "text", "title": { "en": "Client name or MAC address", "nl": "Clientnaam of MAC-adres" }, "placeholder": { "en": "Exact name or MAC address", "nl": "Exacte naam of MAC-adres" } }
   ],
   "tokens": [
     { "name": "mac", "type": "string", "title": { "en": "MAC address", "nl": "MAC-adres" } },

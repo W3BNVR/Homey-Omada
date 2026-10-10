@@ -119,26 +119,19 @@ module.exports = class OmadaControllerApp extends Homey.App {
       const row = await this.getSwitchPort(device, port);
       return Number(row.poe) === 1;
     });
-    const autocompleteClient = async query => {
-      const needle = String(query || '').trim().toLowerCase();
-      const devices = this.homey.drivers.getDriver('omada_client').getDevices();
-      return devices.map(device => {
-        const mac = String(device.getData().mac || '').toUpperCase().replaceAll(':', '-');
-        const name = device.getName();
-        return { id: mac, name, description: mac };
-      }).filter(item => item.id && (!needle
-        || item.name.toLowerCase().includes(needle)
-        || item.id.toLowerCase().includes(needle)));
-    };
-    const matchesClientMac = (args, state) => {
-      const selectedMac = String(args.client?.id || '').toUpperCase().replaceAll(':', '-');
+    const matchesClient = (args, state) => {
+      const selectedClient = String(args.client?.id || args.client || '').trim();
+      const selectedMac = selectedClient.toUpperCase().replace(/[:-]/g, '');
       const eventMac = String(state?.mac || '').toUpperCase().replaceAll(':', '-');
-      return Boolean(selectedMac && eventMac && selectedMac === eventMac);
+      if (!selectedClient) return false;
+      if (/^[0-9A-F]{12}$/.test(selectedMac)) {
+        return selectedMac === eventMac.replace(/[:-]/g, '');
+      }
+      return selectedClient.toLowerCase() === String(state?.name || '').trim().toLowerCase();
     };
     for (const id of ['client_online_specific', 'client_offline_specific']) {
       const card = flow.getTriggerCard(id);
-      card.registerArgumentAutocompleteListener('client', autocompleteClient);
-      card.registerRunListener(matchesClientMac);
+      card.registerRunListener(matchesClient);
     }
   }
 
@@ -204,13 +197,13 @@ module.exports = class OmadaControllerApp extends Homey.App {
       for (const [mac, client] of current) {
         if (!this.clientSnapshot.has(mac)) {
           await connected.trigger(client);
-          await specificConnected.trigger(client, { mac });
+          await specificConnected.trigger(client, { mac, name: client.name });
         }
       }
       for (const [mac, client] of this.clientSnapshot) {
         if (!current.has(mac)) {
           await disconnected.trigger(client);
-          await specificDisconnected.trigger(client, { mac });
+          await specificDisconnected.trigger(client, { mac, name: client.name });
         }
       }
     }
