@@ -10,11 +10,11 @@ function onHomeyReady(Homey) {
   $('message').textContent = 'Verbinden met Omada…';
 
   function api(method, path, body) {
-    return new Promise((resolve, reject) => {
-      const callback = (error, result) => error ? reject(error) : resolve(result);
-      if (body === undefined) Homey.api(method, path, callback);
-      else Homey.api(method, path, body, callback);
-    });
+    // Homey widgets expose a Promise-based API. Passing a callback here makes
+    // the GET body a function and leaves the widget waiting forever.
+    return body === undefined
+      ? Homey.api(method, path)
+      : Homey.api(method, path, body);
   }
 
   function typeGroup(value) {
