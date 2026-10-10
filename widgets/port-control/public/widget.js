@@ -2,19 +2,12 @@
 
 function initializeOmadaWidget(Homey) {
   const $ = id => document.getElementById(id);
-  let devices = [];
   let currentDevice = null;
   let loading = false;
 
-  $('message').textContent = 'Verbinden met Omada…';
-
-  function api(method, path, body) {
-    // Homey widgets expose a Promise-based API. Passing a callback here makes
-    // the GET body a function and leaves the widget waiting forever.
-    return body === undefined
-      ? Homey.api(method, path)
-      : Homey.api(method, path, body);
-  }
+  const api = (method, path, body) => body === undefined
+    ? Homey.api(method, path)
+    : Homey.api(method, path, body);
 
   function typeGroup(value) {
     const type = String(value || '').toLowerCase();
@@ -24,8 +17,8 @@ function initializeOmadaWidget(Homey) {
     return '';
   }
 
-  function online(value) {
-    return value === 1 || value === true || ['1', 'online', 'connected', 'adopted'].includes(String(value).toLowerCase());
+  function isOn(value) {
+    return value === 1 || value === true || ['1', 'online', 'connected', 'adopted', 'up', 'active'].includes(String(value).toLowerCase());
   }
 
   function portNumber(port, index) {
@@ -38,20 +31,17 @@ function initializeOmadaWidget(Homey) {
       .forEach(id => { $(id).disabled = !enabled || loading; });
   }
 
-  function renderPort(port, label) {
-    $('info-port').textContent = label ? `Poort ${label}` : 'Selecteer een poort';
-    if (!port || typeof port !== 'object') {
-      $('info-link').textContent = '—';
-      $('info-poe').textContent = '—';
-      return;
-    }
-    const link = port.linkStatus ?? port.status ?? port.link ?? port.up;
-    const speed = port.linkSpeed ?? port.speed ?? port.speedMbps;
+  function renderPort(port) {
+    const link = port?.linkStatus ?? port?.status ?? port?.link ?? port?.up;
+    const speed = port?.linkSpeed ?? port?.speed ?? port?.speedMbps;
     const speedNames = { 1: '10 Mbps', 2: '100 Mbps', 3: '1 Gbps', 4: '2,5 Gbps', 5: '10 Gbps' };
-    $('info-link').textContent = `${link === undefined ? '—' : (online(link) ? 'Actief' : 'Inactief')}${speed ? ` · ${speedNames[speed] || speed}` : ''}`;
-    const poe = port.poeStatus ?? port.poeOutEnable ?? port.poeMode ?? port.poe;
-    const draw = port.power ?? port.powerConsumption ?? port.poePower;
-    $('info-poe').textContent = `${poe === undefined ? '—' : (online(poe) ? 'Aan' : 'Uit')}${draw !== undefined ? ` · ${draw} W` : ''}`;
+    const linked = link !== undefined && isOn(link);
+    $('info-link').textContent = !port ? 'Geen poort geselecteerd'
+      : `${linked ? 'Verbonden' : 'Niet verbonden'}${speed ? ` · ${speedNames[speed] || speed}` : ''}`;
+    $('link-dot').className = `link-indicator ${!port ? '' : linked ? 'connected' : 'disconnected'}`;
+    const poe = port?.poeStatus ?? port?.poeOutEnable ?? port?.poeMode ?? port?.poe;
+    const draw = port?.power ?? port?.powerConsumption ?? port?.poePower;
+    $('info-poe').textContent = `PoE ${poe === undefined ? '—' : isOn(poe) ? 'aan' : 'uit'}${draw !== undefined ? ` · ${draw} W` : ''}`;
   }
 
   function renderActions(device, port) {
@@ -64,83 +54,72 @@ function initializeOmadaWidget(Homey) {
     $('poe-actions').hidden = !poePort;
     $('recover-actions').hidden = !switchPort || !poePort;
     $('wan-actions').hidden = !gatewayWan;
-    if (!type) $('action-note').textContent = 'Dit Omada-apparaattype wordt niet ondersteund.';
-    else if (!hasPort) $('action-note').textContent = device ? 'Voor dit apparaat zijn geen poorten beschikbaar.' : 'Selecteer een apparaat en poort.';
+    if (!device) $('action-note').textContent = 'Selecteer een apparaat in de widgetinstellingen.';
+    else if (!hasPort) $('action-note').textContent = device.ports?.length ? 'Selecteer een poort om te bedienen.' : 'Geen poortinformatie beschikbaar.';
     else if (type === 'eap' && !poePort) $('action-note').textContent = 'Deze EAP-poort is alleen informatief.';
-    else $('action-note').textContent = type === 'switch'
-      ? 'Poort- en PoE-instellingen worden bijgewerkt via Omada.'
-      : type === 'gateway' ? 'WAN- en PoE-bediening is beschikbaar voor deze gatewaypoort.' : 'PoE-uitvoer wordt bijgewerkt via Omada.';
+    else $('action-note').textContent = type === 'gateway' ? 'Beschikbare gatewayacties' : 'Kies een actie';
     setButtons(hasPort);
-    if (!switchPort) {
-      $('port-on').disabled = true;
-      $('port-off').disabled = true;
-      $('poe-recover').disabled = true;
-    }
-    if (!poePort) {
-      $('poe-on').disabled = true;
-      $('poe-off').disabled = true;
-    }
-    if (!gatewayWan) {
-      $('wan-on').disabled = true;
-      $('wan-off').disabled = true;
-    }
+    if (!switchPort) ['port-on', 'port-off', 'poe-recover'].forEach(id => { $(id).disabled = true; });
+    if (!poePort) ['poe-on', 'poe-off'].forEach(id => { $(id).disabled = true; });
+    if (!gatewayWan) ['wan-on', 'wan-off'].forEach(id => { $(id).disabled = true; });
   }
 
   function renderDevice(device) {
     currentDevice = device || null;
-    $('info-name').textContent = device?.name || 'Omada';
-    $('info-model').textContent = device ? `${typeGroup(device.type).toUpperCase() || 'Omada'} · ${device.model || '—'}` : '—';
+    $('info-name').textContent = device?.name || 'Omada-poortbeheer';
+    $('device-subtitle').textContent = device
+      ? `${typeGroup(device.type).toUpperCase()}${device.model ? ` · ${device.model}` : ''}`
+      : 'Kies een apparaat in de widgetinstellingen';
+    $('info-model').textContent = device?.model || '—';
     $('info-ip').textContent = device?.ip || '—';
     $('info-mac').textContent = device?.mac || '—';
-    $('info-firmware').textContent = device?.firmware || '—';
     const status = $('info-status');
-    status.textContent = device ? (online(device.status) ? 'Online' : 'Offline') : '—';
-    status.className = `status-pill ${device ? (online(device.status) ? 'online' : 'offline') : ''}`;
+    status.className = `status ${device ? (isOn(device.status) ? 'online' : 'offline') : ''}`;
+    status.querySelector('span').textContent = device ? (isOn(device.status) ? 'Online' : 'Offline') : '—';
     const select = $('port');
     const ports = Array.isArray(device?.ports) ? device.ports : [];
     select.replaceChildren();
     if (!device) {
-      select.add(new Option('Selecteer een apparaat', ''));
+      select.add(new Option('Selecteer een apparaat in de widgetinstellingen', ''));
       select.disabled = true;
-      renderPort(null, '');
+      renderPort(null);
       renderActions(null, null);
       return;
     }
     if (!ports.length) {
       select.add(new Option('Geen poortgegevens beschikbaar', ''));
       select.disabled = true;
-      renderPort(null, '');
+      renderPort(null);
       renderActions(device, null);
       return;
     }
     ports.forEach((port, index) => select.add(new Option(`Poort ${port.portName || portNumber(port, index)}`, String(index))));
     select.disabled = false;
     select.value = '0';
-    renderPort(ports[0], portNumber(ports[0], 0));
+    renderPort(ports[0]);
     renderActions(device, ports[0]);
   }
 
   async function load() {
     loading = true;
     setButtons(false);
+    $('message').textContent = 'Apparaat- en poortgegevens ophalen…';
     try {
       const selectedIds = Homey.getDeviceIds();
       if (!Array.isArray(selectedIds) || !selectedIds.length) {
-        throw new Error('Open de widgetinstellingen en selecteer één Omada-apparaat.');
+        throw new Error('Open widget bewerken → Instellingen en kies één Omada-apparaat.');
       }
       const result = await Promise.race([
         api('GET', `/device/${encodeURIComponent(selectedIds[0])}`),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Omada reageert niet binnen 20 seconden.')), 20000)),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('De Omada-controller reageert niet binnen 20 seconden.')), 20000)),
       ]);
-      devices = [result.device].filter(device => device && typeGroup(device.type));
-      if (!devices.length) throw new Error('Het gekozen apparaat wordt niet ondersteund.');
-      $('device-name').textContent = `${typeGroup(devices[0].type).toUpperCase()} · ${devices[0].name}`;
-      renderDevice(devices[0]);
-      $('message').textContent = 'Apparaatgegevens bijgewerkt';
+      const device = result?.device;
+      if (!device || !typeGroup(device.type)) throw new Error('Kies een gekoppelde Omada-switch, gateway of EAP.');
+      renderDevice(device);
+      $('message').textContent = 'Livegegevens bijgewerkt';
     } catch (error) {
-      $('device-name').textContent = 'Apparaat niet beschikbaar';
       renderDevice(null);
-      $('message').textContent = error.message || 'Verbinding met Omada mislukt.';
+      $('message').textContent = error?.message || 'Apparaatgegevens ophalen is mislukt.';
     } finally {
       loading = false;
       renderActions(currentDevice, currentDevice?.ports?.[Number($('port').value)]);
@@ -149,22 +128,23 @@ function initializeOmadaWidget(Homey) {
 
   async function runAction(label, method, path, body) {
     if (!currentDevice || $('port').disabled) return;
-    const port = currentDevice.ports[Number($('port').value)];
+    const index = Number($('port').value);
+    const port = currentDevice.ports[index];
     const type = typeGroup(currentDevice.type);
     const siteId = encodeURIComponent(currentDevice.siteId);
     const mac = encodeURIComponent(String(currentDevice.mac || '').replaceAll(':', '-'));
-    const portId = encodeURIComponent(portNumber(port, Number($('port').value)));
+    const portId = encodeURIComponent(portNumber(port, index));
     loading = true;
     setButtons(false);
-    $('message').textContent = `${label} wordt uitgevoerd…`;
+    $('message').textContent = `${label}…`;
     try {
       const requestBody = typeof body === 'function' ? body(port, portId) : body;
       await api(method, path(siteId, mac, portId, type), requestBody);
-      $('message').textContent = `${label} uitgevoerd voor poort ${portId}.`;
+      $('message').textContent = `${label} uitgevoerd`;
       loading = false;
       await load();
     } catch (error) {
-      $('message').textContent = error.message || `${label} is mislukt.`;
+      $('message').textContent = error?.message || `${label} is mislukt.`;
     } finally {
       loading = false;
       renderActions(currentDevice, currentDevice?.ports?.[Number($('port').value)]);
@@ -173,7 +153,7 @@ function initializeOmadaWidget(Homey) {
 
   $('port').addEventListener('change', event => {
     const port = currentDevice?.ports?.[Number(event.target.value)];
-    renderPort(port, port ? portNumber(port, Number(event.target.value)) : '');
+    renderPort(port);
     renderActions(currentDevice, port);
   });
   $('port-on').addEventListener('click', () => runAction('Poort inschakelen', 'PUT', (site, mac, port) => `/port/${site}/${mac}/${port}`, { enabled: true }));

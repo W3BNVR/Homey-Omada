@@ -1,6 +1,6 @@
 {
   "name": { "en": "Omada port control", "nl": "Omada-poortbeheer" },
-  "height": 280,
+  "height": 340,
   "devices": { "type": "app", "singular": true },
   "settings": [],
   "api": {
