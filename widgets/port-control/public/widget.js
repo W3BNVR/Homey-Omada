@@ -5,6 +5,36 @@ function initializeOmadaWidget(Homey) {
   let currentDevice = null;
   let loading = false;
 
+  function portKey(port, index) {
+    return String(port?.port ?? port?.portNumber ?? port?.portId ?? port?.lanPort ?? index);
+  }
+
+  function portSelectionStorageKey(device) {
+    return `omada-port-selection:${device?.id || device?.mac || 'default'}`;
+  }
+
+  function readPortSelection(device) {
+    try {
+      return localStorage.getItem(portSelectionStorageKey(device));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function savePortSelection(device, key) {
+    try {
+      localStorage.setItem(portSelectionStorageKey(device), key);
+    } catch (_) {
+      // Keep the selection for the current render even when storage is unavailable.
+    }
+  }
+
+  function selectedPort() {
+    const ports = currentDevice?.ports || [];
+    const index = ports.findIndex((port, portIndex) => portKey(port, portIndex) === $('port').value);
+    return index >= 0 ? ports[index] : null;
+  }
+
   const api = (method, path, body) => body === undefined
     ? Homey.api(method, path)
     : Homey.api(method, path, body);
@@ -101,6 +131,7 @@ function initializeOmadaWidget(Homey) {
     status.className = `status ${device ? (isOn(device.status) ? 'online' : 'offline') : ''}`;
     status.querySelector('span').textContent = device ? (isOn(device.status) ? 'Online' : 'Offline') : '—';
     const select = $('port');
+    const previousPortKey = select.value;
     const ports = Array.isArray(device?.ports) ? device.ports : [];
     select.replaceChildren();
     if (!device) {
@@ -117,11 +148,15 @@ function initializeOmadaWidget(Homey) {
       renderActions(device, null);
       return;
     }
-    ports.forEach((port, index) => select.add(new Option(`Poort ${port.portName || portNumber(port, index)}`, String(index))));
+    ports.forEach((port, index) => select.add(new Option(`Poort ${port.portName || portNumber(port, index)}`, portKey(port, index))));
     select.disabled = false;
-    select.value = '0';
-    renderPort(ports[0]);
-    renderActions(device, ports[0]);
+    const storedPortKey = readPortSelection(device);
+    const requestedPortKey = storedPortKey || previousPortKey;
+    const selectedPortIndex = ports.findIndex((port, index) => portKey(port, index) === requestedPortKey);
+    const selectedIndex = selectedPortIndex >= 0 ? selectedPortIndex : 0;
+    select.value = portKey(ports[selectedIndex], selectedIndex);
+    renderPort(ports[selectedIndex]);
+    renderActions(device, ports[selectedIndex]);
   }
 
   async function load() {
@@ -146,13 +181,13 @@ function initializeOmadaWidget(Homey) {
       $('message').textContent = error?.message || 'Apparaatgegevens ophalen is mislukt.';
     } finally {
       loading = false;
-      renderActions(currentDevice, currentDevice?.ports?.[Number($('port').value)]);
+      renderActions(currentDevice, selectedPort());
     }
   }
 
   async function runAction(label, method, path, body) {
     if (!currentDevice || $('port').disabled) return;
-    const index = Number($('port').value);
+    const index = currentDevice.ports.findIndex((item, portIndex) => portKey(item, portIndex) === $('port').value);
     const port = currentDevice.ports[index];
     const type = typeGroup(currentDevice.type);
     const siteId = encodeURIComponent(currentDevice.siteId);
@@ -171,12 +206,14 @@ function initializeOmadaWidget(Homey) {
       $('message').textContent = error?.message || `${label} is mislukt.`;
     } finally {
       loading = false;
-      renderActions(currentDevice, currentDevice?.ports?.[Number($('port').value)]);
+      renderActions(currentDevice, selectedPort());
     }
   }
 
   $('port').addEventListener('change', event => {
-    const port = currentDevice?.ports?.[Number(event.target.value)];
+    const index = currentDevice?.ports?.findIndex((item, portIndex) => portKey(item, portIndex) === event.target.value) ?? -1;
+    const port = index >= 0 ? currentDevice.ports[index] : null;
+    if (port) savePortSelection(currentDevice, portKey(port, index));
     renderPort(port);
     renderActions(currentDevice, port);
   });

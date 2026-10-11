@@ -14,5 +14,20 @@
   "1.4.0": {
     "en": "Added online detection, client online, CPU and memory, and per-port PoE power flow conditions.",
     "nl": "Flowvoorwaarden toegevoegd voor internetdetectie, online status van clients, CPU- en geheugengebruik en PoE-verbruik per poort."
+  },
+  "1.4.20": {
+    "en": "Client online/offline triggers now support manual MAC entry and a personal device label."
+  },
+  "1.4.21": {
+    "en": "Fixed Omada client presence detection and preserved widget port selection after actions.",
+    "nl": "Detectie van Omada-clientstatus hersteld en poortselectie in de widget behouden na acties."
+  },
+  "1.4.22": {
+    "en": "Persist widget port selection across reloads.",
+    "nl": "Poortselectie in de widget behouden na opnieuw laden."
+  },
+  "1.4.23": {
+    "en": "Fix client presence polling and add a MAC-based online condition.",
+    "nl": "Clientstatuspolling hersteld en een online-voorwaarde op basis van MAC-adres toegevoegd."
   }
 }

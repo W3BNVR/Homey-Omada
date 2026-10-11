@@ -2,6 +2,7 @@
 
 const Homey = require('homey');
 const { OmadaClient } = require('./lib/omada-client');
+const { normalizeMac, clientMac } = require('./lib/common');
 
 module.exports = class OmadaControllerApp extends Homey.App {
   async onInit() {
@@ -9,6 +10,7 @@ module.exports = class OmadaControllerApp extends Homey.App {
     this.registerFlowCards();
     const settings = this.getOmadaSettings();
     this.clientSnapshot = null;
+    this.clientPollInProgress = false;
     this.clientPollTimer = this.homey.setInterval(() => {
       this.pollClientPresence().catch(error => this.error(`Omada-clients controleren mislukt: ${error.message}`));
     }, 60 * 1000);
@@ -18,7 +20,9 @@ module.exports = class OmadaControllerApp extends Homey.App {
         this.log(`Connected to Omada; ${sites.length} site(s) available`);
       } catch (error) {
         this.error(`Omada connection failed: ${error.message}`);
+        return;
       }
+      await this.pollClientPresence().catch(error => this.error(`Omada-clients controleren mislukt: ${error.message}`));
     }
   }
 
@@ -97,6 +101,13 @@ module.exports = class OmadaControllerApp extends Homey.App {
       return Number(status.onlineDetection) > 0;
     });
     flow.getConditionCard('client_online').registerRunListener(async ({ device }) => device.isAvailable());
+    flow.getConditionCard('client_online_mac').registerRunListener(async ({ mac }) => {
+      const selectedMac = normalizeMac(mac);
+      if (!selectedMac) return false;
+      const siteId = await this.resolveSiteId();
+      const clients = await this.getOmadaClient().listConnectedClients(siteId);
+      return clients.some(client => normalizeMac(clientMac(client)) === selectedMac);
+    });
     flow.getConditionCard('device_cpu_above').registerRunListener(async ({ device, percentage }) => {
       const value = Number(device.getSetting('cpu'));
       return Number.isFinite(value) && value >= Number(percentage);
@@ -120,10 +131,8 @@ module.exports = class OmadaControllerApp extends Homey.App {
       return Number(row.poe) === 1;
     });
     const matchesClient = (args, state) => {
-      const selectedMac = String(args.mac || '').trim().toUpperCase().replace(/[:-]/g, '');
-      const eventMac = String(state?.mac || '').toUpperCase().replaceAll(':', '-');
-      return /^[0-9A-F]{12}$/.test(selectedMac)
-        && selectedMac === eventMac.replace(/[:-]/g, '');
+      const selectedMac = normalizeMac(args.mac);
+      return Boolean(selectedMac && selectedMac === normalizeMac(state?.mac));
     };
     for (const id of ['client_online_specific', 'client_offline_specific']) {
       const card = flow.getTriggerCard(id);
@@ -175,35 +184,41 @@ module.exports = class OmadaControllerApp extends Homey.App {
   async pollClientPresence() {
     const settings = this.getOmadaSettings();
     if (!settings.controllerUrl || !settings.omadacId || !settings.clientId || !settings.clientSecret) return;
-    const siteId = await this.resolveSiteId();
-    const clients = await this.getOmadaClient().listConnectedClients(siteId);
-    const current = new Map(clients.map(client => {
-      const mac = String(client.mac || client.macAddress || '').toUpperCase().replaceAll(':', '-');
-      return [mac, {
-        mac,
-        name: String(client.name || client.hostName || client.mac || mac),
-        ip: String(client.ip || client.ipAddress || ''),
-      }];
-    }).filter(([mac]) => Boolean(mac)));
-    if (this.clientSnapshot) {
-      const connected = this.homey.flow.getTriggerCard('client_connected');
-      const disconnected = this.homey.flow.getTriggerCard('client_disconnected');
-      const specificConnected = this.homey.flow.getTriggerCard('client_online_specific');
-      const specificDisconnected = this.homey.flow.getTriggerCard('client_offline_specific');
-      for (const [mac, client] of current) {
-        if (!this.clientSnapshot.has(mac)) {
-          await connected.trigger(client);
-          await specificConnected.trigger(client, { mac, name: client.name });
+    if (this.clientPollInProgress) return;
+    this.clientPollInProgress = true;
+    try {
+      const siteId = await this.resolveSiteId();
+      const clients = await this.getOmadaClient().listConnectedClients(siteId);
+      const current = new Map(clients.map(client => {
+        const mac = normalizeMac(clientMac(client));
+        return [mac, {
+          mac,
+          name: String(client.name || client.clientName || client.hostName || clientMac(client) || mac),
+          ip: String(client.ip || client.ipAddress || client.clientIp || ''),
+        }];
+      }).filter(([mac]) => Boolean(mac)));
+      if (this.clientSnapshot) {
+        const connected = this.homey.flow.getTriggerCard('client_connected');
+        const disconnected = this.homey.flow.getTriggerCard('client_disconnected');
+        const specificConnected = this.homey.flow.getTriggerCard('client_online_specific');
+        const specificDisconnected = this.homey.flow.getTriggerCard('client_offline_specific');
+        for (const [mac, client] of current) {
+          if (!this.clientSnapshot.has(mac)) {
+            await connected.trigger(client);
+            await specificConnected.trigger(client, { mac, name: client.name });
+          }
+        }
+        for (const [mac, client] of this.clientSnapshot) {
+          if (!current.has(mac)) {
+            await disconnected.trigger(client);
+            await specificDisconnected.trigger(client, { mac, name: client.name });
+          }
         }
       }
-      for (const [mac, client] of this.clientSnapshot) {
-        if (!current.has(mac)) {
-          await disconnected.trigger(client);
-          await specificDisconnected.trigger(client, { mac, name: client.name });
-        }
-      }
+      this.clientSnapshot = current;
+    } finally {
+      this.clientPollInProgress = false;
     }
-    this.clientSnapshot = current;
   }
 
   async getSwitchPort(device, port) {

@@ -1,6 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
+const { normalizeMac, clientMac } = require('../../lib/common');
 
 module.exports = class OmadaClientDevice extends Homey.Device {
   async onInit() {
@@ -13,7 +14,8 @@ module.exports = class OmadaClientDevice extends Homey.Device {
   async refreshClient() {
     const { siteId, mac } = this.getData();
     const clients = await this.homey.app.getOmadaClient().listConnectedClients(siteId);
-    const client = clients.find(item => String(item.mac || item.macAddress || '').toUpperCase().replaceAll(':', '-') === String(mac).toUpperCase());
+    const normalizedMac = normalizeMac(mac);
+    const client = clients.find(item => normalizeMac(clientMac(item)) === normalizedMac);
     if (!client) {
       await this.setSettings({ online: 'Offline' });
       await this.setUnavailable('Client is niet verbonden met Omada.');

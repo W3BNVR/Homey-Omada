@@ -1,0 +1,13 @@
+{
+  "id": "client_online_mac",
+  "title": { "en": "Omada client with MAC [[mac]] is online", "nl": "Omada-client met MAC-adres [[mac]] is online" },
+  "titleFormatted": { "en": "Omada client [[mac]] is online", "nl": "Omada-client [[mac]] is online" },
+  "args": [
+    {
+      "name": "mac",
+      "type": "text",
+      "title": { "en": "Client MAC address", "nl": "MAC-adres van de client" },
+      "placeholder": { "en": "For example AA-BB-CC-DD-EE-FF", "nl": "Bijvoorbeeld AA-BB-CC-DD-EE-FF" }
+    }
+  ]
+}
