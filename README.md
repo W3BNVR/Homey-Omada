@@ -1,6 +1,6 @@
 # W3B - Omada Integration
 
-Local Homey app for an Omada Software Controller running in Docker (Controller 6.3.0.36).
+Local Homey app for an Omada Software Controller running in Docker (tested on Controller version 6.3.0.36).
 
 ## Functionality
 
