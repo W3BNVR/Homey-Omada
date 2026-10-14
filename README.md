@@ -1,4 +1,4 @@
-# W3B - Omada Integration
+# Homey.OmadaIntegration
 
 Local Homey app for an Omada Software Controller running in Docker (tested on Controller version 6.3.0.36).
 

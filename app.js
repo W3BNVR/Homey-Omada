@@ -6,7 +6,7 @@ const { normalizeMac, clientMac } = require('./lib/common');
 
 module.exports = class OmadaControllerApp extends Homey.App {
   async onInit() {
-    this.log('W3B - Omada Integration initialized');
+    this.log('Homey.OmadaIntegration initialized');
     this.registerFlowCards();
     const settings = this.getOmadaSettings();
     this.clientSnapshot = null;

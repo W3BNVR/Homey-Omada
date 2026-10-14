@@ -29,5 +29,9 @@
   "1.4.23": {
     "en": "Fix client presence polling and add a MAC-based online condition.",
     "nl": "Clientstatuspolling hersteld en een online-voorwaarde op basis van MAC-adres toegevoegd."
+  },
+  "1.4.24": {
+    "en": "Renamed the app to Homey.OmadaIntegration.",
+    "nl": "De app hernoemd naar Homey.OmadaIntegration."
   }
 }

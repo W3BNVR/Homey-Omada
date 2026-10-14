@@ -1,6 +1,6 @@
 {
   "id": "com.mnapj.omada",
-  "version": "1.4.23",
+  "version": "1.4.24",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "runtime": "nodejs",
@@ -8,8 +8,8 @@
     "local"
   ],
   "name": {
-    "en": "W3B - Omada Integration",
-    "nl": "W3B - Omada Integration"
+    "en": "Homey.OmadaIntegration",
+    "nl": "Homey.OmadaIntegration"
   },
   "description": {
     "en": "Connect Omada switches, access points and gateways to Homey.",
